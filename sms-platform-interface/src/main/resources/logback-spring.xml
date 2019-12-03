@@ -130,7 +130,7 @@
     </logger>
 
     <springProfile name="local">
-        <root level="debug">
+        <root level="info">
             <!-- 本地测试时使用，将日志打印到控制台,实际部署时请注释掉 -->
             <appender-ref ref="STDOUT"/>
             <appender-ref ref="rootstdout"/>
