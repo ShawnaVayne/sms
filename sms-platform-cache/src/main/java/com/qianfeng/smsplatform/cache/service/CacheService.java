@@ -9,10 +9,17 @@ import java.util.Set;
  * 2019/12/3 9:31
  */
 public interface CacheService {
+    /**
+     * todo:将数据存储进redis并设置过期时间
+     * @param key
+     * @param value
+     * @param expireTime
+     * @return
+     */
     Boolean set(String key, Object value, int expireTime);
 
     /**
-     * todo:存储为
+     * todo:将数据存储进redis并设置过期时间
      * @param key
      * @param value
      * @param expireTime
@@ -28,6 +35,12 @@ public interface CacheService {
      */
     Boolean set(String key, Object value);
 
+    /**
+     * todo:设置一对key-value
+     * @param key
+     * @param value
+     * @return
+     */
     Boolean set(String key, String value);
 
     /**
@@ -52,6 +65,11 @@ public interface CacheService {
      */
     Object getObject(String key);
 
+    /**
+     * todo：返回key中的size
+     * @param key
+     * @return
+     */
     long size(String key);
 
     /**
@@ -68,18 +86,34 @@ public interface CacheService {
      */
     boolean expire(String key, long seconds);
 
+    /**
+     * todo：获取剩余过期时间
+     * @param key
+     * @return
+     */
     long getExpire(String key);
 
     /**
      * todo:为用户账户充值
      * @param key 用户账户，类型ELEVEN_CUSTOMER_FEE:+费用
      * @param delta
-     * @return
+     * @return 充值后总额
      */
     long incr(String key, long delta);
 
+    /**
+     * todo：账户扣费
+     * @param key 用户账户，类型ELEVEN_CUSTOMER_FEE:+费用
+     * @param delta 费用
+     * @return 扣除后总额
+     */
     long decr(String key, long delta);
 
+    /**
+     * todo：
+     * @param pattern
+     * @return
+     */
     Set<String> keys(String pattern);
 
     /**

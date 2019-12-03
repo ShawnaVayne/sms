@@ -3,7 +3,7 @@ package com.qianfeng.smsplatform.cache.service.impl;
 import com.qianfeng.smsplatform.cache.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -17,13 +17,11 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class CacheServiceImpl implements CacheService {
     @Autowired
-    private StringRedisTemplate template;
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String,Object> template;
     @Override
     public Boolean set(String key, Object value, int expireTime) {
         try {
-            template.opsForValue().set(key,value.toString());
+            template.opsForValue().set(key,value);
             if(expireTime>0){
                 template.expire(key,expireTime,TimeUnit.SECONDS);
             }
@@ -52,7 +50,7 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public Boolean set(String key, Object value) {
         try{
-            template.opsForValue().set(key,value.toString());
+            template.opsForValue().set(key,value);
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -74,7 +72,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public String get(String key) {
-        return template.opsForValue().get(key);
+        return template.opsForValue().get(key).toString();
     }
 
     @Override
@@ -114,6 +112,8 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public long incr(String key, long delta) {
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
         Long increment = template.opsForValue().increment(key, delta);
         return increment;
     }
@@ -133,10 +133,7 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public Map<Object, Object> hmget(String key) {
         Map<Object, Object> entries = template.opsForHash().entries(key);
-        if(entries!=null){
-            return entries;
-        }
-        return null;
+        return entries;
     }
 
     @Override
