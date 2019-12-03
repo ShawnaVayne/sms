@@ -71,21 +71,37 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public String get(String key) {
-        return template.opsForValue().get(key).toString();
+        Object o = template.opsForValue().get(key);
+        if(o==null){
+            return "0";
+        }
+        return o.toString();
     }
 
     @Override
     public Object getAndSet(String key, String value) {
-        return template.opsForValue().getAndSet(key, value);
+        Object o = template.opsForValue().getAndSet(key, value);
+        if(o==null){
+            return "null";
+        }
+        return o;
     }
 
     @Override
     public Object getObject(String key) {
-        return template.opsForValue().get(key);
+        Object o = template.opsForValue().get(key);
+        if(o==null){
+            return "null";
+        }
+        return o;
     }
 
     @Override
     public long size(String key) {
+        String s = get(key);
+        if(s==null){
+            return -1;
+        }
         Long size = template.opsForValue().size(key);
         return size;
     }
@@ -111,12 +127,20 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public long incr(String key, long delta) {
+        String s = get(key);
+        if(s==null){
+            return -1;
+        }
         Long increment = template.opsForValue().increment(key, delta);
         return increment;
     }
 
     @Override
     public long decr(String key, long delta) {
+        String s = get(key);
+        if(s==null){
+            return -1;
+        }
         Long increment = template.opsForValue().increment(key, 0-delta);
         return increment;
     }
