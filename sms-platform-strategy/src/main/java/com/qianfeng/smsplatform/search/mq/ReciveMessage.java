@@ -30,19 +30,15 @@ public class ReciveMessage {
 
     /**
      * todo: 每次接受信息进行处理
-     * @param bytes
+     * @param submit
      * @throws IOException
      * @throws ClassNotFoundException
      * @throws TimeoutException
      */
     @RabbitListener(queues = RabbitMqConsants.TOPIC_PRE_SEND, autoStartup = "true", containerFactory = "customContainerFactory")
-    public void getMessage(byte[] bytes) throws IOException, ClassNotFoundException, TimeoutException {
+    public void getMessage(Standard_Submit submit) throws IOException, ClassNotFoundException, TimeoutException {
         String[] filterNameArray = filterNames.split(",");
         //从mq中反序列化发送来的对象
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        ObjectInputStream ois = new ObjectInputStream(bais);
-        GenericMessage genericMessage = (GenericMessage) ois.readObject();
-        Standard_Submit submit = (Standard_Submit) genericMessage.getPayload();
         Standard_Report report = new Standard_Report();
         //客户ID
         report.setClientID(submit.getClientID());
@@ -63,30 +59,24 @@ public class ReciveMessage {
         }
         //把report的状态同步到submit
         submit.setReportState(report.getState());
-        //准备序列化
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(baos);
         //状态报告发送次数
         report.setSendCount(1);
 
-        queueConfig.declareQueue(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT);
+        //queueConfig.declareQueue(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT);
         //如果状态不是发送失败状态
         if (report.getState() != 2) {
             //序列化submit，将submit发送到网关队列
-            oos.writeObject(submit);
-            queueConfig.declareQueue(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID());
+            //queueConfig.declareQueue(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID());
             //发送待发日志
-            sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID(), baos.toByteArray());
+            sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID(), submit);
 
         } else {
-            oos.writeObject(submit);
-            queueConfig.declareQueue(RabbitMqConsants.TOPIC_SMS_SEND_LOG);
+            //queueConfig.declareQueue(RabbitMqConsants.TOPIC_SMS_SEND_LOG);
             //发送下发日志
-            sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_SEND_LOG, baos.toByteArray());
+            sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_SEND_LOG, submit);
         }
-        oos.writeObject(report);
         //发送状态报告
-        sendMessage.sendMessage(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, baos.toByteArray());
+        sendMessage.sendMessage(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, report);
     }
 
 //    /**
