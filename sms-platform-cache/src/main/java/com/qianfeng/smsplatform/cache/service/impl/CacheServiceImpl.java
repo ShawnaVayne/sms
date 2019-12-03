@@ -3,7 +3,6 @@ package com.qianfeng.smsplatform.cache.service.impl;
 import com.qianfeng.smsplatform.cache.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -112,8 +111,6 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public long incr(String key, long delta) {
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
         Long increment = template.opsForValue().increment(key, delta);
         return increment;
     }
