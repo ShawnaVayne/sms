@@ -7,10 +7,17 @@ spring:
     active: '@profileActive@'
   application:
     name: STRATEGY-SERVICE
+  rabbitmq:
+    port: 5672
+    host: 10.9.21.3
+    username: admin
+    password: admin
+    virtual-host: my_vhost
+
 
 smsplatform:
   #  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsFeeFilter,smsRouterFilter
-  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsFeeFilter,smsRouterFilter
+  filters: #smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsLimitFilter,smsFeeFilter,smsRouterFilter
   sms_send_limit:
     day: 10
     hour: 5
