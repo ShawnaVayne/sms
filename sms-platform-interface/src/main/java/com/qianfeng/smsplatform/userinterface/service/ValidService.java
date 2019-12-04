@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface ValidService {
 
-    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String [] split, String content)throws IOException;
+    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String [] split, String content,String userIpAddr,String pwd,String clientID)throws IOException;
+
+
 
 }

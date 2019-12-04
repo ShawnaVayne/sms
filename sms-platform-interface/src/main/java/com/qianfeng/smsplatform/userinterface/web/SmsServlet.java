@@ -54,13 +54,14 @@ public class SmsServlet extends HttpServlet {
             String content = request.getParameter("content");
             //获取发送方密码
             String pwd = request.getParameter("pwd");
-
+        System.out.println("用户ip地址;"+userIpAddr);
             String[] split = sd.split(",");
         try {
-             list = validService.valid(request, response, split,content );
+             list = validService.valid(request, response, split,content,userIpAddr,pwd,clientID );
 
             for (Standard_Submit standardSubmit : list) {
                 sendStandard_submit.setMessage(RabbitMqConsants.TOPIC_PRE_SEND, standardSubmit);
+                System.out.println("发送成功！");
             }
         } catch (SmsInterfaceException e) {
             response.getWriter().write(e.getCode());

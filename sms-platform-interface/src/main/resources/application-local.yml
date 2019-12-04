@@ -10,7 +10,6 @@ eureka:
 spring:
   rabbitmq:
     host: 10.9.21.3
-
     port: 5672
     username: admin
     password: admin
