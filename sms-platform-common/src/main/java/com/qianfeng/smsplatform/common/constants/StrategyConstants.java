@@ -8,6 +8,7 @@ public class StrategyConstants {
     计费	fee
     路由	router
      **/
+    public final static String STRATEGY_ERROR_PHASE = "phase";
     public final static String STRATEGY_ERROR_BLACK = "black";
     public final static String  STRATEGY_ERROR_DIRTYWORDS = "dirtyWords";
     public final static String STRATEGY_ERROR_LIMIT = "limit";
