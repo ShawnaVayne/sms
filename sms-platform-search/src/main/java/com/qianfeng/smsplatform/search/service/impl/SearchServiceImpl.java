@@ -4,15 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qianfeng.smsplatform.search.service.SearchService;
 import com.qianfeng.smsplatform.search.util.SearchUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Response;
+import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -42,15 +45,18 @@ public class SearchServiceImpl implements SearchService {
             createIndexRequest.settings(Settings.builder().put("number_of_replicas",1).put("number_of_shards",1).build());
             SearchUtil.buildMapping(indexName,createIndexRequest);
             CreateIndexResponse response = client.indices().create(createIndexRequest, RequestOptions.DEFAULT);
-            if(response.equals(Response.SC_OK)){
+            boolean result = response.isAcknowledged();
+            if(result){
                 log.error("创建成功！");
                 return true;
+            }else{
+                log.error("创建失败！");
+                return false;
             }
         }else {
             log.error("创建失败，库也存在");
             return false;
         }
-        return false;
     }
 
     @Override
@@ -65,9 +71,29 @@ public class SearchServiceImpl implements SearchService {
         if(existIndex(indexName)){
             DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(indexName);
             AcknowledgedResponse response = client.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
-            log.error("删除的结果是：{}"+objectMapper.writeValueAsString(response));
-            return true;
+            boolean result = response.isAcknowledged();
+            if(result){
+                log.error("删除的结果是：{}"+objectMapper.writeValueAsString(response));
+                return true;
+            }
         }
         return false;
     }
+
+    @Override
+    public boolean add(String json) throws IOException {
+        IndexRequest request = new IndexRequest(indexName,typeName);
+        request.source(json,XContentType.JSON);
+        IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+        DocWriteResponse.Result result = response.getResult();
+
+        if(result.equals(DocWriteResponse.Result.CREATED)){
+            log.error("创建成功！");
+            return true;
+        }
+        log.error("创建失败！");
+        return false;
+    }
+
+
 }

@@ -28,4 +28,11 @@ public interface SearchService {
      * @throws IOException
      */
     boolean deleteIndex(String indexName) throws IOException;
+
+    /**
+     * todo:插入数据到es
+     * @param json 数据需要是json格式
+     * @return
+     */
+    boolean add(String json) throws IOException;
 }

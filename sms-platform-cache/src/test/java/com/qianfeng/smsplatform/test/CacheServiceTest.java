@@ -46,7 +46,8 @@ public class CacheServiceTest {
     }
     @Test
     public void TestDecr(){
-        long test4 = cacheService.decr("test7", 111111);
+        Integer num = new Integer(11111);
+        long test4 = cacheService.decr(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "0", num);
         System.err.println(test4);
     }
 
@@ -76,22 +77,22 @@ public class CacheServiceTest {
         map.put("userType",2);
         map.put("state",1);
         map.put("mobile","13456785678");*/
-        map.put("id",1);
-        map.put("clientId",0);
+        map.put("id",2);
+        map.put("clientId",2);
         map.put("extendNumber",9988);
         map.put("price",50);
         map.put("channelId",2);
-        boolean result = cacheService.hmset(CacheConstants.CACHE_PREFIX_CLIENT + "6", map);
+        boolean result = cacheService.hmset(CacheConstants.CACHE_PREFIX_ROUTER + "2", map);
         System.err.println(result);
 
     }
     @Test
     public void TestHget(){
-        Map<Object, Object> map = cacheService.hmget(CacheConstants.CACHE_PREFIX_CLIENT+"0");
+        Map<Object, Object> map = cacheService.hmget(CacheConstants.CACHE_PREFIX_ROUTER+"2");
         Set<Map.Entry<Object, Object>> entries = map.entrySet();
         for (Map.Entry<Object, Object> entry : entries) {
-            System.err.println(entry.getKey());
-            System.out.println(entry.getValue());
+
+            System.out.println(entry.getValue()+" "+entry.getValue().getClass());
         }
         System.err.println(map);
     }
