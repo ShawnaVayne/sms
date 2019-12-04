@@ -1,5 +1,7 @@
 package com.qianfeng.smsplatform.cache.web;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qianfeng.smsplatform.cache.service.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +20,8 @@ import java.util.Set;
 public class CacheController {
     @Autowired
     private CacheService cacheService;
-
+    @Autowired
+    private ObjectMapper objectMapper;
     @RequestMapping("/setObj/{key}/{value}/{expireTime}")
     public Boolean setObjectWithExpire(@PathVariable String key,@PathVariable Object value,@PathVariable int expireTime){
         Boolean result = cacheService.set(key, value, expireTime);
@@ -50,7 +53,7 @@ public class CacheController {
         return result;
     }
     @RequestMapping("/getObject/{key}")
-    public Object getObject(String key){
+    public Object getObject(@PathVariable String key){
         Object object = cacheService.getObject(key);
         return object;
     }
@@ -93,8 +96,9 @@ public class CacheController {
         Map<Object, Object> map = cacheService.hmget(key);
         return map;
     }
-    @RequestMapping("/hmset/{key}/{map}")
-    public boolean hMSet(@PathVariable String key,@PathVariable Map<String, Object> map){
+    @RequestMapping("/hmset/{key}/{map_json}")
+    public boolean hMSet(@PathVariable String key,@PathVariable String map_json){
+        Map map = JSONObject.parseObject(map_json,Map.class);
         boolean hmset = cacheService.hmset(key, map);
         return hmset;
     }
