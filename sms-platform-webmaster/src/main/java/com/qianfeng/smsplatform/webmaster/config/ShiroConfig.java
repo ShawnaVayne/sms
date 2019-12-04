@@ -65,6 +65,7 @@ public class ShiroConfig {
         map.put("/sys/login", "anon");//匿名访问
         map.put("/captcha.jpg", "anon");//验证码放行
         map.put("/public/**", "anon");
+        map.put("/getAllChannel", "anon");
         map.put("/json/**", "anon");
         map.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);

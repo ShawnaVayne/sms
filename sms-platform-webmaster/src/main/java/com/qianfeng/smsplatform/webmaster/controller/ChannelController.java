@@ -21,6 +21,20 @@ public class ChannelController {
     @Autowired
     private ChannelService channelService;
 
+    //获取网关列表
+    @ResponseBody
+    @RequestMapping("/getAllChannel")
+    public List<Long> getAllChannel(){
+        List<TChannel> all = channelService.findALL();
+        List<Long> nums = new ArrayList<>();
+        for (TChannel tChannel : all) {
+            nums.add(tChannel.getId());
+        }
+        return nums;
+    }
+
+    /////////////////////////////////////////////////////
+    /*此处往下为源码*/
     @ResponseBody
     @RequestMapping("/sys/channel/list")
     public DataGridResult findPhase(QueryDTO queryDTO) {

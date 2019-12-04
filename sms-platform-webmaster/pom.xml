@@ -72,6 +72,13 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
+
+        <!--test测试依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
