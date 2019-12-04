@@ -1,16 +1,20 @@
 package com.qianfeng.smsplatform.webmaster.controller;
 
+<<<<<<< HEAD
+=======
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
+>>>>>>> 024f677c8cc4f360b9122178d7a08bd08d212780
 import com.qianfeng.smsplatform.webmaster.dto.SmsDTO;
-import com.qianfeng.smsplatform.webmaster.pojo.TAdminUser;
-import com.qianfeng.smsplatform.webmaster.util.JsonUtils;
 import com.qianfeng.smsplatform.webmaster.util.R;
+<<<<<<< HEAD
+=======
 import com.qianfeng.smsplatform.webmaster.util.ShiroUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+>>>>>>> 024f677c8cc4f360b9122178d7a08bd08d212780
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+<<<<<<< HEAD
+=======
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
 
+>>>>>>> 024f677c8cc4f360b9122178d7a08bd08d212780
 @Controller
 public class SmsController {
     private Logger logger = LoggerFactory.getLogger(SmsController.class);
@@ -33,6 +40,9 @@ public class SmsController {
 
     @ResponseBody
     @RequestMapping("/sys/sms/save")
+<<<<<<< HEAD
+    public R addBlack(@RequestBody SmsDTO smsDTO){
+=======
     public R addBlack(@RequestBody SmsDTO smsDTO,HttpSession session) throws JsonProcessingException {
         String mobile = smsDTO.getMobile();
         String content = smsDTO.getContent();
@@ -55,6 +65,7 @@ public class SmsController {
             //String subJson = objectMapper.writeValueAsString(submit);
             rabbitTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
         }
+>>>>>>> 024f677c8cc4f360b9122178d7a08bd08d212780
 
         return R.ok();
     }

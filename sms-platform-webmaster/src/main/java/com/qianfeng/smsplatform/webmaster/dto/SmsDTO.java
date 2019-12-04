@@ -1,6 +1,6 @@
 package com.qianfeng.smsplatform.webmaster.dto;
 
-public class SmsDTO {
+public class SmsDTO  {
     private String mobile;
     private String content;
 

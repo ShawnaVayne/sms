@@ -34,6 +34,7 @@
         <module>sms-platform-interface</module>
         <module>sms-platform-monitor</module>
         <module>sms-platform-gateway</module>
+
     </modules>
 
     <dependencyManagement>
