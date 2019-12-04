@@ -32,10 +32,12 @@ public class SmsKeyWordFilter implements MyFilter {
         IKSegmenter ikSegmenter = new IKSegmenter(stringReader, true);
         Lexeme lex=null;
         while ((lex = ikSegmenter.next()) != null) {
-            Set<String> keyWords = cacheFeignClient.getKeyWords(CacheConstants.CACHE_PREFIX_DIRTYWORDS + lex.getLexemeText());
-            if (keyWords != null) {
+            Set<String> keyWords = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_DIRTYWORDS + lex.getLexemeText());
+            if (keyWords.size() > 0) {
+                System.err.println("敏感词");
                 report.setErrorCode(StrategyConstants.STRATEGY_ERROR_DIRTYWORDS);
                 report.setState(2);
+                break;
             }
         }
     }

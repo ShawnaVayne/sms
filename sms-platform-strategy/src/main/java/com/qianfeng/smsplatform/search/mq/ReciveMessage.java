@@ -26,8 +26,6 @@ public class ReciveMessage {
     private String filterNames;
     @Autowired
     private SendMessage sendMessage;
-    @Autowired
-    private QueueConfig queueConfig;
 
     /**
      * todo: 每次接受信息进行处理

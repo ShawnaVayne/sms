@@ -23,7 +23,7 @@ public class SmsOpIDFilter implements MyFilter {
         String mobileParagraph = submit.getDestMobile().substring(0, 7);
         String location = cacheFeignClient.getLocation(CacheConstants.CACHE_PREFIX_PHASE + mobileParagraph);
         //如果是空说明服务器挂了或者没有查到
-        if (location != null) {
+        if (location != null && !location.equals("0")) {
             int province = new Integer(location.split("&")[0]);
             int city = new Integer(location.split("&")[1]);
             submit.setProvinceId(province);
