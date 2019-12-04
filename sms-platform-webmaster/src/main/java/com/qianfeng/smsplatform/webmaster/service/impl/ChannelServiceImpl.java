@@ -24,6 +24,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public int addChannel(TChannel tChannel) {
+
         return tChannelMapper.insertSelective(tChannel);
     }
 

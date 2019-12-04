@@ -95,6 +95,8 @@ public class CacheController {
     }
     @RequestMapping("/hmset/{key}/{map}")
     public boolean hMSet(@PathVariable String key,@PathVariable Map<String, Object> map){
+        System.err.println(map.getClass());
+        System.err.println(map.get("id"));
         boolean hmset = cacheService.hmset(key, map);
         return hmset;
     }

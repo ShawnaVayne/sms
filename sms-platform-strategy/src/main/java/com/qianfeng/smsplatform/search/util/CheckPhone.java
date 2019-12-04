@@ -139,7 +139,7 @@ public class CheckPhone {
     }
 
     /**
-     * 简单手机号码校验，校验手机号码的长度和1开头
+     * 简单手机号码校验，
      *
      * @param str
      * @return

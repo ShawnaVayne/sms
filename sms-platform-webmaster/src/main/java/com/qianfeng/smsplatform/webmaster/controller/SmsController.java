@@ -52,6 +52,7 @@ public class SmsController {
             submit.setClientID(clientid);
             submit.setMessageContent(content);
             submit.setDestMobile(mobiles[i]);
+            submit.setSource(2);
             //String subJson = objectMapper.writeValueAsString(submit);
             rabbitTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
         }
