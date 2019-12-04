@@ -96,16 +96,9 @@ public class CacheController {
         Map<Object, Object> map = cacheService.hmget(key);
         return map;
     }
-<<<<<<< HEAD
-    @RequestMapping("/hmset/{key}/{map}")
-    public boolean hMSet(@PathVariable String key,@PathVariable Map<String, Object> map){
-        System.err.println(map.getClass());
-        System.err.println(map.get("id"));
-=======
     @RequestMapping("/hmset/{key}/{map_json}")
     public boolean hMSet(@PathVariable String key,@PathVariable String map_json){
         Map map = JSONObject.parseObject(map_json,Map.class);
->>>>>>> 5571b9cedaa0073fb5b8c0dad1a26dc10085b569
         boolean hmset = cacheService.hmset(key, map);
         return hmset;
     }
