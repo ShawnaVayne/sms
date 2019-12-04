@@ -72,27 +72,21 @@ public class CacheServiceImpl implements CacheService {
     @Override
     public String get(String key) {
         Object o = template.opsForValue().get(key);
-        if(o==null){
-            return "0";
+        if(o!=null || o instanceof Integer){
+            return o+"";
         }
-        return o.toString();
+        return "0";
     }
 
     @Override
     public Object getAndSet(String key, String value) {
         Object o = template.opsForValue().getAndSet(key, value);
-        if(o==null){
-            return "null";
-        }
         return o;
     }
 
     @Override
     public Object getObject(String key) {
         Object o = template.opsForValue().get(key);
-        if(o==null){
-            return "null";
-        }
         return o;
     }
 
