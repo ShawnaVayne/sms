@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -58,7 +59,12 @@ public class UserController {
 
     @RequestMapping("/sys/login")
     @ResponseBody
-    public R login(@RequestBody UserDTO userDTO) {
+    public R login(@RequestBody UserDTO userDTO, HttpSession session) {
+        //根据用户的用户名查询用户信息
+        String username = userDTO.getUsername();
+        TAdminUser tAdminUser = adminUserService.findByUsername(username);
+        //将用户信息放入session，以便后续使用
+        session.setAttribute("userInfo",tAdminUser);
         //比对验证码
         String serverKaptcha = ShiroUtils.getKaptcha();
         if (!serverKaptcha.equalsIgnoreCase(userDTO.getCaptcha())) {

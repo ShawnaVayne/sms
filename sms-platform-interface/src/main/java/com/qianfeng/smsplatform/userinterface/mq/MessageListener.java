@@ -30,6 +30,7 @@ public class MessageListener {
         long clientID = message.getClientID();
         Map<Object, Object> objectObjectMap = cacheFeignService.hMGet(CacheConstants.CACHE_PREFIX_CLIENT + clientID);
         String url = (String)objectObjectMap.get("receiveStatusUrl");
+
         System.out.println("用户的url:"+url);
         Httpsend.Send(url,message );
         System.out.println("发送完成！");
