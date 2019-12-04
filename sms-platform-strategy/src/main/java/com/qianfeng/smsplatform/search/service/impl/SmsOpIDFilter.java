@@ -1,5 +1,6 @@
 package com.qianfeng.smsplatform.search.service.impl;
 
+import com.qianfeng.smsplatform.common.constants.CacheConstants;
 import com.qianfeng.smsplatform.common.constants.StrategyConstants;
 import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 /**
  * @Author 徐胜涵
  */
-@Service
+@Service("smsOpIDFilter")
 public class SmsOpIDFilter implements MyFilter {
 
     @Autowired
@@ -19,11 +20,15 @@ public class SmsOpIDFilter implements MyFilter {
 
     @Override
     public void doFilter(Standard_Submit submit, Standard_Report report) {
-        String mobileParagraph = submit.getDestMobile().substring(0, 8);
-        String location = cacheFeignClient.getLocation(StrategyConstants.STRATEGY_ERROR_PHASE + mobileParagraph);
-        int province = new Integer(location.split("&")[0]);
-        int city = new Integer(location.split("&")[1]);
-        submit.setProvinceId(province);
-        submit.setCityId(city);
+        String mobileParagraph = submit.getDestMobile().substring(0, 7);
+        String location = cacheFeignClient.getLocation(CacheConstants.CACHE_PREFIX_PHASE + mobileParagraph);
+        //如果是空说明服务器挂了或者没有查到
+        if (location != null) {
+            int province = new Integer(location.split("&")[0]);
+            int city = new Integer(location.split("&")[1]);
+            submit.setProvinceId(province);
+            submit.setCityId(city);
+        }
+
     }
 }

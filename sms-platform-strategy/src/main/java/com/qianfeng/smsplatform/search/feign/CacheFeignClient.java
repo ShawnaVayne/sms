@@ -4,22 +4,21 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import sun.awt.SunHints;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
 import java.util.Set;
 
-@FeignClient("CACHE-SERVICE")
+@FeignClient(value = "CACHE-SERVICE", fallback = FeignHystrix.class)
 public interface CacheFeignClient {
 
-    @GetMapping("/cache/getLocation")
-    String getLocation(@PathVariable("mobileParagraph") String mobileParagraph);
+    @GetMapping("/cache/get/{key}")
+    String getLocation(@PathVariable("key") String mobileParagraph);
 
-    @GetMapping("/cache/isBlack/{phoneNumber}")
-    String isBlack(@PathVariable("phoneNumber") String phoneNumber);
+    @RequestMapping("/cache/get/{key}")
+    String isBlack(@PathVariable("key") String phoneNumber);
 
-    @GetMapping("/cache/getKeyWords")
-    List<String> getKeyWords();
+    @GetMapping("/cache/keys/{pattern}")
+    Set<String> getKeyWords(@PathVariable("pattern") String pattern);
 
     @GetMapping("/cache/getSize")
     Set getKeySet(@PathVariable("timeQueue") String timeQueue);

@@ -13,11 +13,14 @@ spring:
     username: admin
     password: admin
     virtual-host: my_vhost
-
+feign:
+  hystrix:
+    enabled: true #必须设置为true 否则会出现错误
 
 smsplatform:
   #  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsFeeFilter,smsRouterFilter
-  filters: #smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsLimitFilter,smsFeeFilter,smsRouterFilter
+  #  smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsLimitFilter,smsFeeFilter,smsRouterFilter
+  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter
   sms_send_limit:
     day: 10
     hour: 5
