@@ -67,12 +67,11 @@ public class ClientBusinessServiceImpl implements ClientBusinessService {
 
     @Override
     public int updateClientBusiness(TClientBusiness tClientBusiness) {
-        //先从数据库中获取得到原始为修改的客户对象
-        Long id = tClientBusiness.getId();
-        //将修改后的客户对象放入缓存中
         try {
+            //将修改后的客户对象放入缓存中
             String json = objectMapper.writeValueAsString(tClientBusiness);
-            cacheFeign.hMSet(CacheConstants.CACHE_PREFIX_CLIENT+id,json);
+            logger.info("json对象：{}",json);
+            cacheFeign.hMSet(CacheConstants.CACHE_PREFIX_CLIENT+tClientBusiness.getId(),json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -82,7 +81,7 @@ public class ClientBusinessServiceImpl implements ClientBusinessService {
 
     @Override
     public TClientBusiness findById(Long id) {
-        return null;
+        return tClientBusinessMapper.selectByPrimaryKey(id);
     }
 
 

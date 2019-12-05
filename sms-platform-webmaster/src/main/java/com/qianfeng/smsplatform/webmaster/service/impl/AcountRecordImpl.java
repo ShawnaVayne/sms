@@ -1,15 +1,19 @@
 package com.qianfeng.smsplatform.webmaster.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.qianfeng.smsplatform.common.constants.CacheConstants;
 import com.qianfeng.smsplatform.webmaster.dao.TAcountRecordMapper;
 import com.qianfeng.smsplatform.webmaster.dao.TClientBusinessMapper;
 import com.qianfeng.smsplatform.webmaster.dto.DataGridResult;
 import com.qianfeng.smsplatform.webmaster.dto.QueryDTO;
+import com.qianfeng.smsplatform.webmaster.feign.CacheFeign;
 import com.qianfeng.smsplatform.webmaster.pojo.TAcountRecord;
 import com.qianfeng.smsplatform.webmaster.pojo.TAcountRecordExample;
 import com.qianfeng.smsplatform.webmaster.pojo.TClientBusiness;
 import com.qianfeng.smsplatform.webmaster.service.AcountRecordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,6 +21,7 @@ import org.springframework.util.StringUtils;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class AcountRecordImpl implements AcountRecordService {
 
@@ -26,6 +31,9 @@ public class AcountRecordImpl implements AcountRecordService {
     @Autowired
     private TClientBusinessMapper tClientBusinessMapper;
 
+    @Autowired
+    private CacheFeign cacheFeign;
+
 
     //初始化费用数据到缓存
     @Override
@@ -34,6 +42,13 @@ public class AcountRecordImpl implements AcountRecordService {
         tAcountRecord.setPaidvalue(paidvalue);
         tAcountRecord.setCreatetime(new Date());
         int i = tAcountRecordMapper.insertSelective(tAcountRecord);
+        Integer fee = Integer.valueOf(cacheFeign.get(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + tAcountRecord.getClientid()));
+        if(fee!=null){
+            fee = fee + paidvalue;
+            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),fee);
+        }else{
+            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),paidvalue);
+        }
         return i;
     }
 

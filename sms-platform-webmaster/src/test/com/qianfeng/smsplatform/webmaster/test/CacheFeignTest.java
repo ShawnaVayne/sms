@@ -47,4 +47,10 @@ public class CacheFeignTest {
         boolean b = cacheFeign.hMSet(CacheConstants.CACHE_PREFIX_CLIENT+tcb.getId(), json);
         System.err.println(b);
     }
+
+    @Test
+    public void testSetObject(){
+        Boolean b = cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "6", (long)100000);
+        System.err.println(b);
+    }
 }

@@ -5,6 +5,7 @@ import com.qianfeng.smsplatform.webmaster.dto.QueryDTO;
 import com.qianfeng.smsplatform.webmaster.pojo.TClientBusiness;
 import com.qianfeng.smsplatform.webmaster.service.ClientBusinessService;
 import com.qianfeng.smsplatform.webmaster.util.R;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
+@Log4j2
 @Controller
 public class ClientBusinessController {
 
     @Autowired
     private ClientBusinessService clientBusinessService;
+
 
     @ResponseBody
     @RequestMapping("/sys/clientbusiness/list")
@@ -39,6 +42,7 @@ public class ClientBusinessController {
     @ResponseBody
     @RequestMapping("/sys/clientbusiness/info/{id}")
     public R findById(@PathVariable("id") Long id) {
+        log.info("用户传过来的id：{}",id);
         TClientBusiness tClientBusiness = clientBusinessService.findById(id);
         return R.ok().put("clientbusiness", tClientBusiness);
     }

@@ -15,13 +15,30 @@ import java.util.Map;
 @FeignClient("CACHE-SERVICE")
 public interface CacheFeign {
     /**
-     * 设置String类型的数据
+     * 设置String类型的数据，value为String类型
      * @param key
      * @param value
      * @return
      */
     @RequestMapping("/cache/set/{key}/{value}")
     Boolean set(@PathVariable String key, @PathVariable String value);
+
+    /**
+     * 设置String类型数据，value为Object类型
+     * @param key
+     * @param value
+     * @return
+     */
+    @RequestMapping("/cache/setObj/{key}/{value}")
+    Boolean setObject(@PathVariable String key,@PathVariable Object value);
+
+    /**
+     * 获取redis中String类型的数据
+     * @param key
+     * @return
+     */
+    @RequestMapping("/cache/get/{key}")
+    String get(@PathVariable String key);
 
     /**
      * 根据key值删除缓存中的数据
