@@ -42,9 +42,9 @@ public interface CacheFeign {
     /**
      * 向redis中插入hash类型的数据
      * @param key
-     * @param map
+     * @param map_json
      * @return
      */
-    @RequestMapping("/cache/hmset/{key}/{map}")
-    boolean hMSet(@PathVariable String key,@PathVariable Map<String, Object> map);
+    @RequestMapping("/cache/hmset/{key}/{map_json}")
+    boolean hMSet(@PathVariable String key,@PathVariable String map_json);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qianfeng.smsplatform.common.constants.CacheConstants;
 import com.qianfeng.smsplatform.webmaster.SmsPlatformWebManagerApplication;
 import com.qianfeng.smsplatform.webmaster.feign.CacheFeign;
+import com.qianfeng.smsplatform.webmaster.pojo.TClientBusiness;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,12 @@ public class CacheFeignTest {
     @Test
     public void testHMset() throws IOException {
 
-        Map<String ,Object> map = new HashMap<>();
-        map.put("name","sjw");
-        map.put("age",123);
-        map.put("id",12);
-        String mapJson = objectMapper.writeValueAsString(map);
-        boolean b = cacheFeign.hMSet(CacheConstants.CACHE_PREFIX_CLIENT+map.get("id"), map);
+        TClientBusiness tcb = new TClientBusiness();
+        tcb.setId(12L);
+        tcb.setPwd("123456");
+        tcb.setMobile("11011111111");
+        String json = objectMapper.writeValueAsString(tcb);
+        boolean b = cacheFeign.hMSet(CacheConstants.CACHE_PREFIX_CLIENT+tcb.getId(), json);
         System.err.println(b);
     }
 }
