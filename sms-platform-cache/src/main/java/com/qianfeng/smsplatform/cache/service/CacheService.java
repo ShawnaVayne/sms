@@ -130,4 +130,12 @@ public interface CacheService {
      * @return 是否插入成功
      */
     boolean hmset(String key, Map<String, Object> map);
+
+    /**
+     * todo:为实现分布式锁新增的方法
+     * @param key
+     * @param value
+     * @return
+     */
+    boolean setnx(String key,String value);
 }

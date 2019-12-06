@@ -2,7 +2,6 @@ package com.qianfeng.smsplatform.monitor.test;
 
 import com.qianfeng.smsplatform.monitor.MonitorApplication;
 import com.qianfeng.smsplatform.monitor.feign.ChannelFeign;
-import com.qianfeng.smsplatform.monitor.pojo.TChannel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

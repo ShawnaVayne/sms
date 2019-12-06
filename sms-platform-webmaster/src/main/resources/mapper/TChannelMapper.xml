@@ -109,6 +109,9 @@
         #{spnumber,jdbcType=VARCHAR}, #{protocaltype,jdbcType=TINYINT})
     </insert>
     <insert id="insertSelective" parameterType="com.qianfeng.smsplatform.webmaster.pojo.TChannel">
+        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+            SELECT  last_insert_id()
+        </selectKey>
         insert into t_channel
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">

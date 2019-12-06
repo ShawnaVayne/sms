@@ -2,10 +2,12 @@ package com.qianfeng.smsplatform.webmaster.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.qianfeng.smsplatform.common.constants.CacheConstants;
 import com.qianfeng.smsplatform.webmaster.dao.TInstMapper;
 import com.qianfeng.smsplatform.webmaster.dao.TPhaseMapper;
 import com.qianfeng.smsplatform.webmaster.dto.DataGridResult;
 import com.qianfeng.smsplatform.webmaster.dto.QueryDTO;
+import com.qianfeng.smsplatform.webmaster.feign.CacheFeign;
 import com.qianfeng.smsplatform.webmaster.pojo.TInst;
 import com.qianfeng.smsplatform.webmaster.pojo.TInstExample;
 import com.qianfeng.smsplatform.webmaster.pojo.TPhase;
@@ -26,21 +28,36 @@ public class PhaseServiceImpl implements PhaseService {
     @Autowired
     private TInstMapper tInstMapper;
 
+    //注入缓存feign接口对象
+    @Autowired
+    private CacheFeign cacheFeign;
+
 
     @Override
     public int addPhase(TPhase tPhase) {
+        //向缓存中添加手机号段
+        cacheFeign.set(CacheConstants.CACHE_PREFIX_PHASE+tPhase.getPhase(),tPhase.getProvId()+"&"+tPhase.getCityId());
         return tPhaseMapper.insertSelective(tPhase);
     }
 
     @Override
     public int delPhase(Long id) {
         TPhase tPhase = findById(id);
+        //删除缓存中的手机号段
+        cacheFeign.del(CacheConstants.CACHE_PREFIX_PHASE+tPhase.getPhase());
         return tPhaseMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public int updatePhase(TPhase tPhase) {
+        //从数据库中查询旧值
+        Long id = tPhase.getId();
+        TPhase tPhaseOld = tPhaseMapper.selectByPrimaryKey(id);
+        //删除缓存中的旧值
+        cacheFeign.del(CacheConstants.CACHE_PREFIX_PHASE+tPhaseOld.getPhase());
         int i= tPhaseMapper.updateByPrimaryKey(tPhase);
+        //向缓存中添加用户要更新的新值
+        cacheFeign.set(CacheConstants.CACHE_PREFIX_PHASE+tPhase.getPhase(),tPhase.getProvId()+"&"+tPhase.getCityId());
         return i;
     }
 
