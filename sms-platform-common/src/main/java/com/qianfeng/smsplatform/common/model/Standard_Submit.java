@@ -58,7 +58,7 @@ class Standard_Submit implements Serializable {
      */
     private Date sendTime;
     /**
-     * 运营商
+     * 运营商 1 移动  2 联通  3 电信
      */
     private Integer operatorId;
     /**

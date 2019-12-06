@@ -1,11 +1,16 @@
 package com.qianfeng.smsplatform.search.mq;
 
+import com.qianfeng.smsplatform.common.constants.CacheConstants;
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
 import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.search.config.QueueConfig;
+import com.qianfeng.smsplatform.search.feign.CacheFeignClient;
 import com.qianfeng.smsplatform.search.service.MyFilter;
 import com.qianfeng.smsplatform.search.service.impl.SmsBlackFilter;
+import com.qianfeng.smsplatform.search.util.CheckPhone;
+import com.sun.javafx.sg.prism.CacheFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 @Component
+@Slf4j
 public class ReciveMessage {
 
     @Autowired
@@ -26,6 +32,12 @@ public class ReciveMessage {
     private String filterNames;
     @Autowired
     private SendMessage sendMessage;
+
+    @Autowired
+    private CacheFeignClient cacheFeignClient;
+
+    @Autowired
+    private CreateQueue createQueue;
 
     /**
      * todo: 每次接受信息进行处理
@@ -61,57 +73,34 @@ public class ReciveMessage {
                 break;
             }
         }
-        System.err.println(submit);
-        System.err.println(report);
         //把report的状态同步到submit
         submit.setReportState(report.getState());
         //状态报告发送次数
         report.setSendCount(1);
-
+        Map<Object, Object> hmget = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_CLIENT + submit.getClientID());
+        Integer priority = (Integer) hmget.get("priority");
+        submit.setMessagePriority(new Short(priority + ""));
+        log.info("创建队列：{}", RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID());
+        createQueue.createQueue(RabbitMqConsants.TOPIC_SMS_GATEWAY + 1);
         //如果状态不是发送失败状态
         if (report.getState() != 2) {
-            System.err.println("发送待发日志");
+            log.info("发送待发日志");
             //序列化submit，将submit发送到网关队列
             //发送待发日志
+            log.error("submit:{}", submit);
+
             sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID(), submit);
 
         } else {
-            System.err.println("发送下发日志");
+            log.info("发送下发日志");
             //发送下发日志
+            log.error("submit:{}", submit);
             sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_SEND_LOG, submit);
         }
         //发送状态报告
-        System.err.println("发送状态报告");
+        log.info("发送状态报告");
+        log.error("report:{}", report);
         sendMessage.sendMessage(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, report);
     }
 
-//    /**
-//     * 目的号码
-//     */
-//    private String mobile;
-//
-//    /**
-//     * 定长4个字节 发送状态 0 发送成功 1 等待发送 2 发送失败 (只适用于移动联通)
-//     */
-//    private int state;
-//
-//    /**
-//     * 具体发送状态 (详细见移动联通电信协议)
-//     */
-//    private String errorCode;
-//
-//    /**
-//     * 客户侧唯一序列号
-//     */
-//    private long srcID;
-//    /**
-//     * 客户ID
-//     */
-//    private long clientID;
-//    /**
-//     * 响应返回的运营商消息编号,
-//     */
-//    private String msgId;
-//    /**状态报告推送次数*/
-//    private int sendCount;
 }

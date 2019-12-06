@@ -20,7 +20,7 @@ feign:
 smsplatform:
   #  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsFeeFilter,smsRouterFilter
   #  smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsLimitFilter,smsFeeFilter,smsRouterFilter
-  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsFeeFilter,smsLimitFilter
+  filters: smsOpIDFilter,smsBlackFilter,smsKeyWordFilter,smsFeeFilter,smsLimitFilter,smsRouterFilter
   sms_send_limit:
     day: 10
     hour: 5
