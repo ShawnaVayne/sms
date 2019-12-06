@@ -22,7 +22,14 @@ public class ClientBusinessController {
     @Autowired
     private ClientBusinessService clientBusinessService;
 
+    @ResponseBody
+    @RequestMapping("/sys/getClientBusiness/{id}")
+    public TClientBusiness findClientBusinessById(@PathVariable Long id){
+        TClientBusiness client = clientBusinessService.findById(id);
+        return client;
+    }
 
+    ///////////////////////////////
     @ResponseBody
     @RequestMapping("/sys/clientbusiness/list")
     public DataGridResult findClientBusiness(QueryDTO queryDTO) {

@@ -44,10 +44,11 @@ public class AcountRecordImpl implements AcountRecordService {
         int i = tAcountRecordMapper.insertSelective(tAcountRecord);
         Integer fee = Integer.valueOf(cacheFeign.get(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + tAcountRecord.getClientid()));
         if(fee!=null){
-            fee = fee + paidvalue;
-            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),fee);
+            long exfee = fee + paidvalue;
+            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),exfee);
         }else{
-            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),paidvalue);
+            long exfee = paidvalue;
+            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),exfee);
         }
         return i;
     }

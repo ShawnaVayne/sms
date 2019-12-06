@@ -7,7 +7,7 @@ import com.dangdang.ddframe.job.lite.api.JobScheduler;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
 import com.dangdang.ddframe.job.lite.spring.api.SpringJobScheduler;
 import com.dangdang.ddframe.job.reg.zookeeper.ZookeeperRegistryCenter;
-import com.qianfeng.smsplatform.monitor.job.QueueSizeSimpleJob;
+import com.qianfeng.smsplatform.monitor.job.queuejob.QueueSizeSimpleJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2019/12/5 22:23
  * @Created by sunjiangwei
  */
-@Configuration
+//@Configuration
 public class QueueSizeSimpleJobConfig {
     /**
      * 给作业配置注入一个注册中心（zookerpper）

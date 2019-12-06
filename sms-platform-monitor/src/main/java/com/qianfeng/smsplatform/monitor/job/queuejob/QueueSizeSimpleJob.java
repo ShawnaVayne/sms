@@ -1,4 +1,4 @@
-package com.qianfeng.smsplatform.monitor.job;
+package com.qianfeng.smsplatform.monitor.job.queuejob;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
