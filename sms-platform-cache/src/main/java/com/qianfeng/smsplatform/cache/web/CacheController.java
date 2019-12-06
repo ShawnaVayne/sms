@@ -96,6 +96,7 @@ public class CacheController {
         Map<Object, Object> map = cacheService.hmget(key);
         return map;
     }
+
     @RequestMapping("/hmset/{key}/{map_json}")
     public boolean hMSet(@PathVariable String key,@PathVariable String map_json){
         Map map = JSONObject.parseObject(map_json,Map.class);
