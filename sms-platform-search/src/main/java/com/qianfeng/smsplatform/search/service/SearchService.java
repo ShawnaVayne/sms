@@ -1,6 +1,11 @@
 package com.qianfeng.smsplatform.search.service;
 
+import org.springframework.messaging.support.GenericMessage;
+
 import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * es管理模块
@@ -13,12 +18,6 @@ public interface SearchService {
      * @return
      */
     boolean createIndexSubmit() throws IOException;
-
-    /**
-     * todo:创建库表-- 状态报告表
-     * @return
-     */
-    boolean createIndexReport() throws IOException;
 
     /**
      * todo：判断库存在不存在
@@ -42,14 +41,29 @@ public interface SearchService {
      * @param json 插入内容
      * @return 是否插入成功
      */
-    boolean addToLog(String indexName,String typeName,String table,String json) throws IOException;
+    boolean addToLog(String indexName,String typeName,String json) throws IOException;
 
     /**
      * todo:根据状态报告修改下行日志
      * @param indexName
      * @param TypeName
+     * @param table
      * @param json
      * @return
      */
-    boolean updateLog(String indexName,String TypeName,String json);
+    boolean updateLog(String indexName, String TypeName, String table, GenericMessage json) throws IOException;
+
+    /**
+     * todo:根据传递过来的json类型的字符串
+     * @param param
+     * @return
+     */
+    List<Map> search(String param) throws IOException, ParseException;
+
+    /**
+     * todo:根据条件查找统计数据
+     * @param param
+     * @return
+     */
+    long getCount(String param) throws IOException, ParseException;
 }

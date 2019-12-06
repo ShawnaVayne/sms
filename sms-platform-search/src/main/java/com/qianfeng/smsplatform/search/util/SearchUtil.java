@@ -3,9 +3,17 @@ package com.qianfeng.smsplatform.search.util;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @author simon
@@ -13,7 +21,6 @@ import java.text.SimpleDateFormat;
  */
 public class SearchUtil {
     private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
     public static void buildSubmitMapping(String typeName, CreateIndexRequest request) throws IOException {
         XContentBuilder builder = JsonXContent.contentBuilder().startObject()
                 .startObject("properties")
@@ -79,33 +86,39 @@ public class SearchUtil {
                 .endObject();
         request.mapping(typeName,builder);
     }
-    public static void buildReportMapping(String typeName,CreateIndexRequest request) throws IOException {
-        XContentBuilder builder = JsonXContent.contentBuilder();
-        builder.startObject()
-                .startObject("properties")
-                .startObject("mobile")
-                .field("type","keyword")
-                .endObject()
-                .startObject("state")
-                .field("type","long")
-                .endObject()
-                .startObject("errorCode")
-                .field("type","type")
-                .endObject()
-                .startObject("srcID")
-                .field("type","long")
-                .endObject()
-                .startObject("clientID")
-                .field("type","long")
-                .endObject()
-                .startObject("msgId")
-                .field("type","keyword")
-                .endObject()
-                .startObject("sendCount")
-                .field("type","long")
-                .endObject()
-                .endObject()
-                .endObject();
-        request.mapping(typeName,builder);
-    }
+   public static SearchSourceBuilder getSearchSourceBuilder(Map map) throws ParseException {
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+       BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+       Object startTime = map.get("startTime");
+       Object endTime = map.get("endTime");
+       Object mobile = map.get("mobile");
+       Object clientID = map.get("clientID");
+
+       TermQueryBuilder clientTerm = null;
+       TermQueryBuilder mobileTerm = null;
+       RangeQueryBuilder receiveTerm = null;
+
+       if(clientID!=null){
+           clientTerm = new TermQueryBuilder("clientID",clientID.toString());
+           boolQueryBuilder.must(clientTerm);
+       }else if(mobile!=null){
+           mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
+           boolQueryBuilder.must(mobileTerm);
+       }else if(startTime!=null & endTime!=null){
+           Date start = sdf.parse(startTime.toString());
+           Date end = sdf.parse(endTime.toString());
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }else if(startTime != null & endTime == null){
+           Date start = sdf.parse(startTime.toString());
+           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }else if(startTime == null & endTime != null){
+           Date end = sdf.parse(endTime.toString());
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       sourceBuilder.query(boolQueryBuilder);
+       return sourceBuilder;
+   }
 }

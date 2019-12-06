@@ -2,6 +2,7 @@ package com.qianfeng.smsplatform.search.mq;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
+import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.search.service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,15 +19,11 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class SendSmsTopic {
+public class LogChannelListen {
     @Value("${elasticsearch.index.submit.name}")
     private String submitIndexName;
     @Value("${elasticsearch.index.submit.type}")
     private String submitTypeName;
-    @Value("${elasticsearch.index.report.name}")
-    private String reportIndexName;
-    @Value("${elasticsearch.index.report.type}")
-    private String reportTypeName;
     @Autowired
     private SearchService searchService;
     @Autowired
@@ -44,12 +41,13 @@ public class SendSmsTopic {
     @RabbitListener(queues = RabbitMqConsants.TOPIC_UPDATE_SMS_REPORT)
     public void handleUpdateSmsReport(GenericMessage message) throws IOException {
         log.error("收到来自{}的信息是{}",RabbitMqConsants.TOPIC_UPDATE_SMS_REPORT,message);
-        boolean result = searchService.addToLog(reportIndexName,reportTypeName,objectMapper.writeValueAsString(message.getPayload()));
+        Standard_Report report = (Standard_Report) message.getPayload();
+        String msgId = report.getMsgId();
+        boolean result = searchService.updateLog(submitIndexName,submitTypeName,msgId,message);
         if(result){
             log.error("插入成功！");
         }else {
             log.error("插入失败！");
         }
     }
-
 }
