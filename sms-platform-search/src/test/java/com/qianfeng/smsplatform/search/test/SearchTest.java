@@ -24,7 +24,7 @@ public class SearchTest {
 
     @Test
     public void testCreate() throws IOException {
-        boolean index = searchService.createIndex();
+        boolean index = searchService.createIndexSubmit();
         log.error("处理结果：{}",index);
     }
     @Test

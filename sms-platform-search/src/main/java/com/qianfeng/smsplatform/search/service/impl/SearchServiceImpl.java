@@ -10,8 +10,8 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
@@ -29,34 +29,58 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class SearchServiceImpl implements SearchService {
-    @Value("${elasticsearch.index.name}")
-    private String indexName;
-    @Value("${elasticsearch.index.type}")
-    private String typeName;
+    @Value("${elasticsearch.index.submit.name}")
+    private String submitIndexName;
+    @Value("${elasticsearch.index.submit.type}")
+    private String submitTypeName;
+    @Value("${elasticsearch.index.report.name}")
+    private String reportIndexName;
+    @Value("${elasticsearch.index.report.type}")
+    private String reportTypeName;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
     private RestHighLevelClient client;
     @Override
-    public boolean createIndex() throws IOException {
+    public boolean createIndexSubmit() throws IOException {
         //首先判断index存在不存在
-        if(!existIndex(indexName)){
-            CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
+        if(!existIndex(submitIndexName)){
+            CreateIndexRequest createIndexRequest = new CreateIndexRequest(submitIndexName);
             createIndexRequest.settings(Settings.builder().put("number_of_replicas",1).put("number_of_shards",1).build());
-            SearchUtil.buildMapping(indexName,createIndexRequest);
+            SearchUtil.buildSubmitMapping(submitTypeName,createIndexRequest);
             CreateIndexResponse response = client.indices().create(createIndexRequest, RequestOptions.DEFAULT);
             boolean result = response.isAcknowledged();
             if(result){
-                log.error("创建成功！");
+                log.error("{} 创建成功！",submitIndexName);
                 return true;
             }else{
-                log.error("创建失败！");
+                log.error("{} 创建失败！",submitIndexName);
                 return false;
             }
         }else {
-            log.error("创建失败，库也存在");
+            log.error("{} 创建失败，库也存在",submitIndexName);
             return false;
         }
+    }
+
+    @Override
+    public boolean createIndexReport() throws IOException {
+        if(!existIndex(reportIndexName)){
+            CreateIndexRequest request = new CreateIndexRequest(reportIndexName);
+            request.settings(Settings.builder().put("number_of_replicas",1).put("number_of_shards",1).build());
+            SearchUtil.buildReportMapping(reportTypeName,request);
+            CreateIndexResponse response = client.indices().create(request, RequestOptions.DEFAULT);
+            boolean result = response.isAcknowledged();
+            if(result){
+                log.error("{} 创建成功！",reportIndexName);
+                return true;
+            }else{
+                log.error("{} 创建失败",reportIndexName);
+                return false;
+            }
+        }
+        log.error("{} 创建失败！库已存在！");
+        return false;
     }
 
     @Override
@@ -81,19 +105,22 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean add(String json) throws IOException {
-        IndexRequest request = new IndexRequest(indexName,typeName);
+    public boolean addToLog(String indexName,String TypeName,String json) throws IOException {
+        IndexRequest request = new IndexRequest(indexName,TypeName);
         request.source(json,XContentType.JSON);
-        IndexResponse response = client.index(request, RequestOptions.DEFAULT);
-        DocWriteResponse.Result result = response.getResult();
-
+        DocWriteResponse.Result result = client.index(request, RequestOptions.DEFAULT).getResult();
         if(result.equals(DocWriteResponse.Result.CREATED)){
-            log.error("创建成功！");
+            log.error("添加数据成功！");
             return true;
         }
-        log.error("创建失败！");
+        log.error("添加数据失败！");
         return false;
     }
 
-
+    @Override
+    public boolean updateLog(String indexName, String typeName, String json) {
+        UpdateRequest updateRequest = new UpdateRequest(indexName,typeName);
+        updateRequest.doc()
+        return false;
+    }
 }

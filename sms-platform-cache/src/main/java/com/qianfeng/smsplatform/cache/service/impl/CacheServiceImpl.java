@@ -161,4 +161,10 @@ public class CacheServiceImpl implements CacheService {
             return false;
         }
     }
+
+    @Override
+    public boolean setnx(String key, String value) {
+        Boolean result = template.opsForValue().setIfAbsent(key, value);
+        return result;
+    }
 }
