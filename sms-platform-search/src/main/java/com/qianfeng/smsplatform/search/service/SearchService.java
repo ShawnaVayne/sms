@@ -42,7 +42,7 @@ public interface SearchService {
      * @param json 插入内容
      * @return 是否插入成功
      */
-    boolean addToLog(String indexName,String typeName,String json) throws IOException;
+    boolean addToLog(String indexName,String typeName,String table,String json) throws IOException;
 
     /**
      * todo:根据状态报告修改下行日志

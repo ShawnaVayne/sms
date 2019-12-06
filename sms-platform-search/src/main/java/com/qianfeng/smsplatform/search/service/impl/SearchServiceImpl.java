@@ -118,8 +118,9 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean updateLog(String indexName, String typeName, String json) {
-        UpdateRequest updateRequest = new UpdateRequest(indexName,typeName);
+    public boolean updateLog(String indexName, String typeName,String table, String json) {
+
+        UpdateRequest updateRequest = new UpdateRequest(indexName,typeName,table);
         updateRequest.doc()
         return false;
     }

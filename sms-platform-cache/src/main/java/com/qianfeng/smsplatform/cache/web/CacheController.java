@@ -103,4 +103,9 @@ public class CacheController {
         boolean hmset = cacheService.hmset(key, map);
         return hmset;
     }
+    @RequestMapping("/setnx/{key}/{value}")
+    public boolean setNx(@PathVariable String key,@PathVariable String value){
+        boolean result = cacheService.setnx(key, value);
+        return result;
+    }
 }
