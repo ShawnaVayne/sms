@@ -2,6 +2,7 @@ package com.qianfeng.smsplatform.search.mq;
 
 import com.qianfeng.smsplatform.common.constants.CacheConstants;
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
+import com.qianfeng.smsplatform.common.constants.StrategyConstants;
 import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.search.config.QueueConfig;
@@ -48,6 +49,7 @@ public class ReciveMessage {
      */
     @RabbitListener(queues = RabbitMqConsants.TOPIC_PRE_SEND, autoStartup = "true", containerFactory = "customContainerFactory")
     public void getMessage(Standard_Submit submit) throws IOException, ClassNotFoundException, TimeoutException {
+
         String[] filterNameArray = filterNames.split(",");
         //从mq中反序列化发送来的对象
         Standard_Report report = new Standard_Report();
@@ -59,20 +61,40 @@ public class ReciveMessage {
         report.setSrcID(submit.getSrcSequenceId());
         //待发送状态
         report.setState(1);
+        //如果是手机号或者座机号
+        if (CheckPhone.isPhoneOrTel(submit.getSrcNumber())) {
+            //移动
+            if (CheckPhone.isChinaMobilePhoneNum(submit.getSrcNumber())) {
+                submit.setOperatorId(1);
+            }
+            //联通
+            if (CheckPhone.isChinaUnicomPhoneNum(submit.getSrcNumber())) {
+                submit.setOperatorId(2);
+            }
+            //电信
+            if (CheckPhone.isChinaTelecomPhoneNum(submit.getSrcNumber())) {
+                submit.setOperatorId(3);
+            }
+            for (int i = 0; i < filterNameArray.length; i++) {
+                //System.out.println(filterNameArray[i]);
+                MyFilter myFilter = filterList.get(filterNameArray[i]);
+
+                myFilter.doFilter(submit, report);
+                //如果是状态2(发送失败)，就跳出循环
+                System.err.println("state" + report.getState());
+                if (report.getState() == 2) {
+                    break;
+                }
+            }
+            //如果验证不是手机号或者座机号直接路由错误
+        } else {
+            report.setErrorCode(StrategyConstants.STRATEGY_ERROR_ROUTER);
+            report.setState(2);
+        }
         /*System.out.println(submit);
         System.out.println(filterNames);
         System.out.println("filterSize" + filterList.size());*/
-        for (int i = 0; i < filterNameArray.length; i++) {
-            //System.out.println(filterNameArray[i]);
-            MyFilter myFilter = filterList.get(filterNameArray[i]);
 
-            myFilter.doFilter(submit, report);
-            //如果是状态2(发送失败)，就跳出循环
-            System.err.println("state" + report.getState());
-            if (report.getState() == 2) {
-                break;
-            }
-        }
         //把report的状态同步到submit
         submit.setReportState(report.getState());
         //状态报告发送次数
@@ -88,7 +110,8 @@ public class ReciveMessage {
             //序列化submit，将submit发送到网关队列
             //发送待发日志
             log.error("submit:{}", submit);
-
+            //发送成功
+            report.setState(0);
             sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID(), submit);
 
         } else {

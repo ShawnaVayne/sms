@@ -23,20 +23,7 @@ public class SmsRouterFilter implements MyFilter {
 
     @Override
     public void doFilter(Standard_Submit submit, Standard_Report report) {
-        //如果是手机号或者座机号
-        if (CheckPhone.isPhoneOrTel(submit.getSrcNumber())) {
-            //移动
-            if (CheckPhone.isChinaMobilePhoneNum(submit.getSrcNumber())) {
-                submit.setOperatorId(1);
-            }
-            //联通
-            if (CheckPhone.isChinaUnicomPhoneNum(submit.getSrcNumber())) {
-                submit.setOperatorId(2);
-            }
-            //电信
-            if (CheckPhone.isChinaTelecomPhoneNum(submit.getSrcNumber())) {
-                submit.setOperatorId(3);
-            }
+
             Map<Object, Object> hmget = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_ROUTER + submit.getClientID());
             //通道Id
             Object channelId = hmget.get("channelId");
@@ -50,11 +37,6 @@ public class SmsRouterFilter implements MyFilter {
                 //将扩展号码添加到源手机号的后面
                 submit.setSrcNumber(submit.getSrcNumber() + extendNumber);
             }
-        }
-        //如果验证不是手机号或者座机号直接路由错误
-        else {
-            report.setErrorCode(StrategyConstants.STRATEGY_ERROR_ROUTER);
-            report.setState(2);
-        }
+
     }
 }

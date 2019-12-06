@@ -1,7 +1,7 @@
 ﻿eureka:
   client:
     service-url:
-      defaultZone: http://admin:123456@localhost:8000/eureka/
+      defaultZone: http://admin:123456@10.9.21.228:8000/eureka/
 spring:
   profiles:
     active: '@profileActive@'
