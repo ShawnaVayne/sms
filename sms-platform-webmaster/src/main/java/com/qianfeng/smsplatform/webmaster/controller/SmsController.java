@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.UUID;
 
 @Controller
 public class SmsController {
@@ -54,6 +55,7 @@ public class SmsController {
             submit.setDestMobile(mobiles[i]);
             submit.setSource(2);
             submit.setSendTime(new Date());
+            submit.setMsgid(String.valueOf(UUID.randomUUID()));
             //String subJson = objectMapper.writeValueAsString(submit);
             rabbitTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
         }

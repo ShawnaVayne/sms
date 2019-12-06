@@ -65,9 +65,14 @@ public class FeeSimpeJob implements SimpleJob {
                 String msg = "您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)";
                 submit.setMessageContent(msg);
                 //将信息发送到队列中
-
+                /*String objectJson = null;
+                try {
+                    objectJson = objectMapper.writeValueAsString(submit);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }*/
                 amqpTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
-                System.err.println("您的余额少于1000元，请您及时充值,以免给您造成不便 ;) ;)");
+                System.err.println("您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)");
             }
         }
     }
