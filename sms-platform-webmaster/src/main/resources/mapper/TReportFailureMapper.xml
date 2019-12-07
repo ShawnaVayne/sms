@@ -3,9 +3,6 @@
 <mapper namespace="com.qianfeng.smsplatform.webmaster.dao.TReportFailureMapper">
     <sql id="Example_insert_field">
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
             <if test="mobile != null">
                 mobile,
             </if>
@@ -15,10 +12,10 @@
             <if test="errorCode != null">
                 errorCode,
             </if>
-            <if test="srcId != null">
+            <if test="srcID != null">
                 srcID,
             </if>
-            <if test="clientId != null">
+            <if test="clientID != null">
                 clientID,
             </if>
             <if test="msgId != null">
@@ -35,9 +32,6 @@
     
     <sql id="Example_insert_field_value">
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id},
-            </if>
             <if test="mobile != null">
                 #{mobile},
             </if>
@@ -47,11 +41,11 @@
             <if test="errorCode != null">
                 #{errorCode},
             </if>
-            <if test="srcId != null">
-                #{srcId},
+            <if test="srcID != null">
+                #{srcID},
             </if>
-            <if test="clientId != null">
-                #{clientId},
+            <if test="clientID != null">
+                #{clientID},
             </if>
             <if test="msgId != null">
                 #{msgId},
