@@ -12,7 +12,7 @@ import java.util.Set;
  * @Date 2019/12/6 12:48
  * @Created by sunjiangwei
  */
-@FeignClient(value = "CACHE-SERVICE")
+@FeignClient(value = "CACHE-SERVICE",fallback = CacheFeignFallback.class)
 public interface CacheFeign {
 
     /**

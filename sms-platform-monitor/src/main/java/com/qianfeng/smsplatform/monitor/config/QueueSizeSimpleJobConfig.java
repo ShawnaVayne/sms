@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2019/12/5 22:23
  * @Created by sunjiangwei
  */
-//@Configuration
+@Configuration
 public class QueueSizeSimpleJobConfig {
     /**
      * 给作业配置注入一个注册中心（zookerpper）
