@@ -32,6 +32,11 @@ public class CacheController {
         Boolean result = cacheService.set(key, value, expireTime);
         return result;
     }
+    @RequestMapping("/setLong/{key}/{value}")
+    public Boolean setLong(@PathVariable String key,@PathVariable long value){
+        Boolean result = cacheService.set(key, value);
+        return result;
+    }
     @RequestMapping("/setObj/{key}/{value}")
     public Boolean setObject(@PathVariable String key,@PathVariable Object value){
         Boolean result = cacheService.set(key, value);

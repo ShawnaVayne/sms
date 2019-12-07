@@ -3,10 +3,7 @@ package com.qianfeng.smsplatform.search.util;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
-import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
@@ -93,10 +90,12 @@ public class SearchUtil {
        Object endTime = map.get("endTime");
        Object mobile = map.get("mobile");
        Object clientID = map.get("clientID");
+       Object keywords = map.get("keyword");
 
        TermQueryBuilder clientTerm = null;
        TermQueryBuilder mobileTerm = null;
        RangeQueryBuilder receiveTerm = null;
+       MatchQueryBuilder keywordMatch = null;
 
        if(clientID!=null){
            clientTerm = new TermQueryBuilder("clientID",clientID.toString());
@@ -104,7 +103,7 @@ public class SearchUtil {
        }else if(mobile!=null){
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
-       }else if(startTime!=null & endTime!=null){
+       } else if(startTime!=null & endTime!=null){
            Date start = sdf.parse(startTime.toString());
            Date end = sdf.parse(endTime.toString());
            receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
@@ -117,6 +116,9 @@ public class SearchUtil {
            Date end = sdf.parse(endTime.toString());
            receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
            boolQueryBuilder.must(receiveTerm);
+       }else if(keywords != null){
+           keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
+           boolQueryBuilder.must(keywordMatch);
        }
        sourceBuilder.query(boolQueryBuilder);
        return sourceBuilder;

@@ -36,12 +36,13 @@ public interface SearchService {
 
     /**
      * todo:插入数据
-     * @param indexName index名字
      * @param TypeName type名字
+     * @param indexName index名字
+     * @param idName
      * @param json 插入内容
      * @return 是否插入成功
      */
-    boolean addToLog(String indexName,String typeName,String json) throws IOException;
+    boolean addToLog(String typeName, String indexName, String idName, String json) throws IOException;
 
     /**
      * todo:根据状态报告修改下行日志
