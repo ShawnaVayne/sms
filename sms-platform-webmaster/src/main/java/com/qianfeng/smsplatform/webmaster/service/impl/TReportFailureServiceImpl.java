@@ -1,7 +1,7 @@
 package com.qianfeng.smsplatform.webmaster.service.impl;
 
+import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.webmaster.dao.TReportFailureMapper;
-import com.qianfeng.smsplatform.webmaster.pojo.TReportFailure;
 import com.qianfeng.smsplatform.webmaster.service.TReportFailureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ public class TReportFailureServiceImpl implements TReportFailureService {
     private TReportFailureMapper tReportFailureMapper;
 
     @Override
-    public int insert(TReportFailure reportFailure) {
+    public int insert(Standard_Report reportFailure) {
         return tReportFailureMapper.insert(reportFailure);
     }
 
     @Override
-    public List<TReportFailure> selectAll() {
+    public List<Standard_Report> selectAll() {
         return tReportFailureMapper.selectAll();
     }
 }

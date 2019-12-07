@@ -30,7 +30,7 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/setObj/{key}/{value}")
-    Boolean setObject(@PathVariable String key,@PathVariable Object value);
+    Boolean setObject(@PathVariable("key") String key,@PathVariable("value") Object value);
 
 
     /**
@@ -40,14 +40,14 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/setLong/{key}/{value}")
-    Boolean setLong(@PathVariable String key,@PathVariable long value);
+    Boolean setLong(@PathVariable("key") String key,@PathVariable("value") long value);
     /**
      * 获取redis中String类型的数据
      * @param key
      * @return
      */
     @RequestMapping("/cache/get/{key}")
-    String get(@PathVariable String key);
+    String get(@PathVariable("key") String key);
 
     /**
      * 根据key值删除缓存中的数据
@@ -71,11 +71,11 @@ public interface CacheFeign {
      * @param map_json
      * @return
      */
-<<<<<<< HEAD
+
     @RequestMapping("/cache/hmset/{key}/{map}")
     boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);
-=======
+
     @RequestMapping("/cache/hmset/{key}/{map_json}")
-    boolean hMSet(@PathVariable String key,@PathVariable String map_json);
->>>>>>> 81af1556d43dae2aac835412aaf44267e6416850
+    boolean hMSet(@PathVariable("key") String key,@PathVariable("key") String map_json);
+
 }

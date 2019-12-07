@@ -11,6 +11,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -29,6 +30,8 @@ public class MessageListener {
     private CacheFeignService cacheFeignService;
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+    private Date date;
 
     @Autowired
     private SendStandard_Submit sendStandard_submit;
@@ -86,6 +89,10 @@ public class MessageListener {
                         log.info("第二次开始");
                         return;
                     }
+
+                    date = new Date(System.currentTimeMillis());
+                    message.setSendTime(date);
+
                         sendStandard_submit.sendstatus(RabbitMqConsants.TOPIC_SMS_REPORT_FAILURE, message);
                     log.info("失败2次状态发往失败MQ");
                     e.printStackTrace();

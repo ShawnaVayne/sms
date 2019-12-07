@@ -8,6 +8,8 @@ import com.qianfeng.smsplatform.monitor.utils.ConnectionUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -38,6 +40,9 @@ public class QueueSizeSimpleJob implements SimpleJob {
     private String password;
     @Value("${spring.rabbitmq.virtual-host}")
     private String virtualHost;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public void execute(ShardingContext shardingContext) {

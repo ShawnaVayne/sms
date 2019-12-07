@@ -1,6 +1,6 @@
 package com.qianfeng.smsplatform.webmaster.service;
 
-import com.qianfeng.smsplatform.webmaster.pojo.TReportFailure;
+import com.qianfeng.smsplatform.common.model.Standard_Report;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public interface TReportFailureService {
-    int insert(TReportFailure reportFailure);
+    int insert(Standard_Report reportFailure);
 
-    List<TReportFailure> selectAll();
+    List<Standard_Report> selectAll();
 }
