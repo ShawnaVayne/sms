@@ -45,7 +45,7 @@ public class Httpsend {
         }
 
         // 创建Post请求
-        HttpPost httpPost = new HttpPost(url );
+        HttpPost httpPost = new HttpPost(url);
         System.out.println("执行完成！");
 
         StringEntity entity = new StringEntity(jsonString, "UTF-8");

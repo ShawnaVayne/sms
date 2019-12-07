@@ -35,4 +35,7 @@ class Standard_Report implements Serializable {
     private String msgId;
     /**状态报告推送次数*/
     private int sendCount;
+
+
+    private int i = 0;
 }

@@ -5,6 +5,7 @@ import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface ValidService {
 
-    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String [] split, String content,String userIpAddr,String pwd,String clientID)throws IOException;
+    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String [] split, String content,String userIpAddr,String pwd,String clientID, Date date)throws IOException;
 
 
 

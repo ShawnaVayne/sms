@@ -21,14 +21,14 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/set/{key}/{value}")
-    Boolean set(@PathVariable String key, @PathVariable String value);
+    Boolean set(@PathVariable("key") String key, @PathVariable("value") String value);
 
     /**
      * 根据key值删除缓存中的数据
      * @param keys
      */
     @RequestMapping("/cache/del/{keys}")
-    void del(@PathVariable String... keys);
+    void del(@PathVariable("keys") String... keys);
 
     /**
      * 根据key值获取redis中map
@@ -36,7 +36,7 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/hmget/{key}")
-    Map<Object,Object> hMGet(@PathVariable String key);
+    Map<Object,Object> hMGet(@PathVariable("key") String key);
 
 
     /**
@@ -46,5 +46,5 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/hmset/{key}/{map}")
-    boolean hMSet(@PathVariable String key,@PathVariable Map<String, Object> map);
+    boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);
 }

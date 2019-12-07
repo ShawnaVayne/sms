@@ -17,8 +17,20 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class SendMq {
 
-    @Bean
+    @Bean  //发送短信到mq
     public Queue queue123(){
         return new Queue(RabbitMqConsants.TOPIC_PRE_SEND);
     }
+
+
+     @Bean //状态报告
+    public  Queue reportQueue() {
+        return new Queue(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT);
+    }
+
+    @Bean //状态报告
+    public  Queue reportQueue1() {
+        return new Queue(RabbitMqConsants.TOPIC_SMS_REPORT_FAILURE);
+    }
+
 }
