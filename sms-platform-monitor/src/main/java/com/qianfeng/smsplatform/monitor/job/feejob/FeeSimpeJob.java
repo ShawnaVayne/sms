@@ -51,7 +51,7 @@ public class FeeSimpeJob implements SimpleJob {
             long clientId = Long.valueOf(key.substring(key.indexOf(":")+1));
             //调用服务，查询对应客户信息
             TClientBusiness client = channelFeign.findClientBusinessById(clientId);
-            //log.info("用户：{}"+client.toString());
+            //log.info("用户：{}",client.getMobile());
             String str = cacheFeign.get(key);
             Integer exfee = Integer.valueOf(str);
             //log.info("剩余余额：{}",exfee);
@@ -62,10 +62,10 @@ public class FeeSimpeJob implements SimpleJob {
                 submit.setDestMobile(client.getMobile());
                 submit.setSendTime(new Date());
                 submit.setSource(2);
-                String msg = "尊敬的用户"+clientId+":余额"+exfee+"===>温馨提示：您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)";
+                String msg = "尊敬的用户"+clientId+"【账号余额"+exfee+"锂】===>温馨提示：您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)";
                 submit.setMessageContent(msg);
 
-                amqpTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
+                //amqpTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
                 System.err.println(msg);
             }
         }
