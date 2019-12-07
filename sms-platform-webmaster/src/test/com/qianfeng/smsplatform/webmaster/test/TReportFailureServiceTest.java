@@ -2,26 +2,24 @@ package com.qianfeng.smsplatform.webmaster.test;
 
 import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.webmaster.SmsPlatformWebManagerApplication;
-import com.qianfeng.smsplatform.webmaster.dao.TReportFailureMapper;
+import com.qianfeng.smsplatform.webmaster.service.TReportFailureService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.List;
-
 /**
- * @Classname TReportFailureMapperTest
+ * @Classname TReportFailureServiceTest
  * @Description TODO
- * @Date 2019/12/7 13:34
+ * @Date 2019/12/7 16:27
  * @Created by sunjiangwei
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SmsPlatformWebManagerApplication.class)
-public class TReportFailureMapperTest {
+public class TReportFailureServiceTest {
     @Autowired
-    private TReportFailureMapper tReportFailureMapper;
+    private TReportFailureService tReportFailureService;
 
     @Test
     public void testInsert(){
@@ -30,15 +28,7 @@ public class TReportFailureMapperTest {
         tpf.setErrorCode("400");
         tpf.setMobile("17638014636");
         tpf.setSrcID(5);
-        int insert = tReportFailureMapper.insert(tpf);
+        int insert = tReportFailureService.insert(tpf);
         System.err.println(insert);
-    }
-
-    @Test
-    public void testSelect(){
-        List<Standard_Report> tReportFailures = tReportFailureMapper.selectAll();
-        for (Standard_Report tReportFailure : tReportFailures) {
-            System.err.println(tReportFailure.toString());
-        }
     }
 }
