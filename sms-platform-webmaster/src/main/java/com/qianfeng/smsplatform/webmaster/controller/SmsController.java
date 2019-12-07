@@ -1,5 +1,6 @@
 package com.qianfeng.smsplatform.webmaster.controller;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
@@ -17,11 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+
+import java.util.Date;
+import java.util.UUID;
+
 
 @Controller
 public class SmsController {
     private Logger logger = LoggerFactory.getLogger(SmsController.class);
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private AmqpTemplate rabbitTemplate;
@@ -45,11 +53,14 @@ public class SmsController {
         logger.info("分割后的手机号数组为：{}", Arrays.asList(mobiles));
 
         for (int i = 0; i < mobiles.length; i++) {
+
             Standard_Submit submit = new Standard_Submit();
             submit.setClientID(clientid);
             submit.setMessageContent(content);
             submit.setDestMobile(mobiles[i]);
             submit.setSource(2);
+            submit.setSendTime(new Date());
+            submit.setMsgid(String.valueOf(UUID.randomUUID()));
             //String subJson = objectMapper.writeValueAsString(submit);
             rabbitTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
         }

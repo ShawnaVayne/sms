@@ -1,7 +1,6 @@
 package com.qianfeng.smsplatform.monitor.controller;
 
 import com.qianfeng.smsplatform.monitor.feign.ChannelFeign;
-import com.qianfeng.smsplatform.monitor.pojo.TChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

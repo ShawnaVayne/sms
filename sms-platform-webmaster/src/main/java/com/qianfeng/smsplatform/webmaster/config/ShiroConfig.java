@@ -64,7 +64,9 @@ public class ShiroConfig {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("/sys/login", "anon");//匿名访问
         map.put("/captcha.jpg", "anon");//验证码放行
+        map.put("/reportfailure/**","anon");
         map.put("/public/**", "anon");
+        map.put("/sys/getClientBusiness/*","anon");
         map.put("/getAllChannel", "anon");
         map.put("/json/**", "anon");
         map.put("/**", "authc");

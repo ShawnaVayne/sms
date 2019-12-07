@@ -73,7 +73,7 @@ public class CacheServiceImpl implements CacheService {
     public String get(String key) {
         Object o = template.opsForValue().get(key);
         if(o!=null || o instanceof Integer){
-            return o+"";
+            return o.toString();
         }
         return "0";
     }
@@ -160,5 +160,11 @@ public class CacheServiceImpl implements CacheService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean setnx(String key, String value) {
+        Boolean result = template.opsForValue().setIfAbsent(key, value);
+        return result;
     }
 }

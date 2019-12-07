@@ -15,13 +15,39 @@ import java.util.Map;
 @FeignClient("CACHE-SERVICE")
 public interface CacheFeign {
     /**
-     * 设置String类型的数据
+     * 设置String类型的数据，value为String类型
      * @param key
      * @param value
      * @return
      */
     @RequestMapping("/cache/set/{key}/{value}")
     Boolean set(@PathVariable("key") String key, @PathVariable("value") String value);
+
+    /**
+     * 设置String类型数据，value为Object类型
+     * @param key
+     * @param value
+     * @return
+     */
+    @RequestMapping("/cache/setObj/{key}/{value}")
+    Boolean setObject(@PathVariable String key,@PathVariable Object value);
+
+
+    /**
+     * 设置String类型数据，value为Long类型
+     * @param key
+     * @param value
+     * @return
+     */
+    @RequestMapping("/cache/setLong/{key}/{value}")
+    Boolean setLong(@PathVariable String key,@PathVariable long value);
+    /**
+     * 获取redis中String类型的数据
+     * @param key
+     * @return
+     */
+    @RequestMapping("/cache/get/{key}")
+    String get(@PathVariable String key);
 
     /**
      * 根据key值删除缓存中的数据
@@ -42,9 +68,14 @@ public interface CacheFeign {
     /**
      * 向redis中插入hash类型的数据
      * @param key
-     * @param map
+     * @param map_json
      * @return
      */
+<<<<<<< HEAD
     @RequestMapping("/cache/hmset/{key}/{map}")
     boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);
+=======
+    @RequestMapping("/cache/hmset/{key}/{map_json}")
+    boolean hMSet(@PathVariable String key,@PathVariable String map_json);
+>>>>>>> 81af1556d43dae2aac835412aaf44267e6416850
 }

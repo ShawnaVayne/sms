@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * @Author 徐胜涵
  */
@@ -22,14 +24,16 @@ public class SmsFeeFilter implements MyFilter {
     @Override
     public void doFilter(Standard_Submit submit, Standard_Report report) {
         Integer fee = (Integer) cacheFeignClient.getFee(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + submit.getClientID());
+        Map<Object, Object> hmget = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_ROUTER + submit.getClientID());
+        Integer price = (Integer) hmget.get("price");
         //如果剩余的钱少于一次发送的费用就报错
-        if (fee < 100) {
+        if (fee < price) {
             log.error("费用不足");
             report.setState(2);
             report.setErrorCode(StrategyConstants.STRATEGY_ERROR_FEE);
         } else {
-            log.info("扣费1毛");
-            cacheFeignClient.decrFee(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + submit.getClientID(), 100);
+            log.info("扣费{}厘", price);
+            cacheFeignClient.decrFee(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + submit.getClientID(), price);
         }
     }
 }

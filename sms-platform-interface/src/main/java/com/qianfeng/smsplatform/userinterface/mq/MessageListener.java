@@ -78,11 +78,11 @@ public class MessageListener {
                    log.info("发送完成！");
                 } catch (Exception e) {
 
-                    if(message.getI()<2){
+                    if(message.getSendCount()<2){
 
                         log.info("第一次");
                         sendStandard_submit.sendstatus(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, message);
-                        message.setI(2);
+                        message.setSendCount(2);
                         log.info("第二次开始");
                         return;
                     }

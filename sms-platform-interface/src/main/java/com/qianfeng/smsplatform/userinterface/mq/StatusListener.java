@@ -27,6 +27,11 @@ public class StatusListener {
 
 
 
+        statusFeignService.addReportFailure(message);
+
+
+
+
 
     }
 

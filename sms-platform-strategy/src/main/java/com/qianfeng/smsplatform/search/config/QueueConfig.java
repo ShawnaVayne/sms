@@ -20,10 +20,6 @@ import java.util.concurrent.TimeoutException;
 @Configuration
 public class QueueConfig {
 
-    @Bean
-    public Queue gateWayQueue() {
-        return new Queue(RabbitMqConsants.TOPIC_SMS_GATEWAY);
-    }
     //下发日志
     @Bean
     public Queue logQueue() {

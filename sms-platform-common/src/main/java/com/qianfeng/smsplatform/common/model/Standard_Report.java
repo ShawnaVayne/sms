@@ -37,5 +37,5 @@ class Standard_Report implements Serializable {
     private int sendCount;
 
 
-    private int i = 0;
+    ;
 }

@@ -1,11 +1,9 @@
 package com.qianfeng.smsplatform.monitor.feign;
 
-import com.qianfeng.smsplatform.monitor.pojo.TChannel;
+import com.qianfeng.smsplatform.monitor.pojo.TClientBusiness;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import sun.rmi.runtime.Log;
 
 import java.util.List;
 
@@ -20,4 +18,9 @@ public interface ChannelFeign {
 
     @RequestMapping("/getAllChannel")
     List<Long> getAllChannel();
+
+    //根据用户id查询用户
+    @RequestMapping("/sys/getClientBusiness/{id}")
+    TClientBusiness findClientBusinessById(@PathVariable Long id);
+
 }

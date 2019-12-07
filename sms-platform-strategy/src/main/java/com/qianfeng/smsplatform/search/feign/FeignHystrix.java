@@ -41,7 +41,7 @@ public class FeignHystrix implements CacheFeignClient {
     }
 
     @Override
-    public void setMessage(String key, String value) {
+    public void setMessage(String key, String value, int expire) {
         log.error("短信设置降级");
     }
 

@@ -4,17 +4,17 @@ spring:
 
 monitorQueueSizeJob:
   #cron表达式，用于控制作业触发时间
-  cron: 0/10 * * * * ?
+  cron: 0/50 * * * * ?
   #作业分片总数
   shardingTotalCount: 1
   shardingItemParameters: null
 monitorFeeJob:
   #cron表达式，用于控制作业触发时间
-  cron: 0/10 * * * * ?
+  cron: 0 0 9 * * ?
   #作业分片总数
   shardingTotalCount: 1
   shardingItemParameters: null
-
+# 0 0 9 * * ?
 #报警参数
 alert:
   gatewayQueue:

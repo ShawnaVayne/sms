@@ -5,6 +5,24 @@ eureka:
 #zookeeper注册中心配置
 regCenter:
   #zookeeper注册中心IP与端口列表
-  serverList: 192.168.157.152:2181
+  serverList: 114.242.146.109:8603,114.242.146.109:8602,114.242.146.109:8601
   #Zookeeper的命名空间
-  namespace: elastic-job-lite-smsplatform
+  namespace: sjw-elastic-job-lite-smsplatform
+#  # rabbitMQ配置信息
+#  spring.rabbitmq.host=10.9.21.3
+#  spring.rabbitmq.port=5672
+#  spring.rabbitmq.username=admin
+#  spring.rabbitmq.password=admin
+#  spring.rabbitmq.virtual-host=my_vhost
+
+spring:
+  rabbitmq:
+    host: 10.9.21.3
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: my_vhost
+  application:
+    name: sms-platform-monitor
+server:
+  port: 9000
