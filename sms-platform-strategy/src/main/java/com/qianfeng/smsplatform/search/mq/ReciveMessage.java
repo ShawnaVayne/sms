@@ -61,7 +61,16 @@ public class ReciveMessage {
         report.setSrcID(submit.getSrcSequenceId());
         //待发送状态
         report.setState(1);
+
+        //从缓存中读取手机号
+        Map<Object, Object> hmget = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_CLIENT + submit.getClientID());
+        if (hmget != null) {
+            String mobile = (String) hmget.get("mobile");
+            submit.setSrcNumber(mobile);
+
+        }
         //如果是手机号或者座机号
+        log.info("发送人手机号：{}" + submit.getSrcNumber());
         if (CheckPhone.isPhoneOrTel(submit.getSrcNumber())) {
             //移动
             if (CheckPhone.isChinaMobilePhoneNum(submit.getSrcNumber())) {
@@ -97,13 +106,14 @@ public class ReciveMessage {
 
         //把report的状态同步到submit
         submit.setReportState(report.getState());
-        //状态报告发送次数
-        report.setSendCount(1);
-        Map<Object, Object> hmget = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_CLIENT + submit.getClientID());
+        //从缓存中拿优先级
+        //缓存中的优先级数据类型是Integer
         Integer priority = (Integer) hmget.get("priority");
+        //先把优先级转换为字符串，再转为short
         submit.setMessagePriority(new Short(priority + ""));
         log.info("创建队列：{}", RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID());
-        createQueue.createQueue(RabbitMqConsants.TOPIC_SMS_GATEWAY + 1);
+        //动态创建网关队列
+        createQueue.createQueue(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID());
         //如果状态不是发送失败状态
         if (report.getState() != 2) {
             log.info("发送待发日志");
