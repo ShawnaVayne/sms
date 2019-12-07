@@ -23,4 +23,7 @@ public interface ChannelFeign {
     @RequestMapping("/sys/getClientBusiness/{id}")
     TClientBusiness findClientBusinessById(@PathVariable Long id);
 
+    //获取状态报告表中是否有数据
+    @RequestMapping("/reportfailure/find")
+    long findAllReportFailure();
 }

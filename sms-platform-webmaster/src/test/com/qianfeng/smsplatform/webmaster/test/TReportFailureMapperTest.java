@@ -2,7 +2,6 @@ package com.qianfeng.smsplatform.webmaster.test;
 
 import com.qianfeng.smsplatform.webmaster.SmsPlatformWebManagerApplication;
 import com.qianfeng.smsplatform.webmaster.dao.TReportFailureMapper;
-import com.qianfeng.smsplatform.webmaster.pojo.TReportFailure;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

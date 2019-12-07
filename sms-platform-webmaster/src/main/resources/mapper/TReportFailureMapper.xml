@@ -27,6 +27,9 @@
             <if test="sendCount != null">
                 sendCount,
             </if>
+            <if test="sendTime != null">
+                sendTime,
+            </if>
         </trim>
     </sql>
     
@@ -56,16 +59,19 @@
             <if test="sendCount != null">
                 #{sendCount},
             </if>
+            <if test="sendTime != null">
+                #{sendTime},
+            </if>
         </trim>
     </sql>
-    <insert id="insert" parameterType="com.qianfeng.smsplatform.webmaster.pojo.TReportFailure">
+    <insert id="insert" parameterType="com.qianfeng.smsplatform.common.model.Standard_Report">
         insert into t_report_failure
         <include refid="Example_insert_field"></include>
         value
         <include refid="Example_insert_field_value"></include>
     </insert>
 
-    <select id="selectAll" resultType="com.qianfeng.smsplatform.webmaster.pojo.TReportFailure">
+    <select id="selectAll" resultType="com.qianfeng.smsplatform.common.model.Standard_Report">
         select * from t_report_failure
     </select>
 </mapper>

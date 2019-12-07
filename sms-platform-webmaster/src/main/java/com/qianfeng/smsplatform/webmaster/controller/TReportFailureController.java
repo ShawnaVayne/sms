@@ -1,11 +1,10 @@
 package com.qianfeng.smsplatform.webmaster.controller;
 
-import com.qianfeng.smsplatform.webmaster.pojo.TReportFailure;
+import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.webmaster.service.TReportFailureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,7 +26,7 @@ public class TReportFailureController {
      */
     @ResponseBody
     @RequestMapping("/reportfailure/save/{reportFailure}")
-    public int addReportFailure(@PathVariable("reportFailure") @RequestBody TReportFailure reportFailure){
+    public int addReportFailure(@PathVariable("reportFailure") Standard_Report reportFailure){
         int i = tReportFailureService.insert(reportFailure);
         return i;
     }
@@ -35,7 +34,7 @@ public class TReportFailureController {
     @ResponseBody
     @RequestMapping("/reportfailure/find")
     public long findAllReportFailure(){
-        List<TReportFailure> tReportFailures = tReportFailureService.selectAll();
+        List<Standard_Report> tReportFailures = tReportFailureService.selectAll();
         long size = tReportFailures.size();
         return size;
     }
