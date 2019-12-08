@@ -26,8 +26,8 @@ public interface CacheFeignClient {
     @GetMapping("/cache/getSize")
     Set getKeySet(@PathVariable("timeQueue") String timeQueue);
 
-    @RequestMapping("/cache/set/{key}/{value}")
-    void setMessage(@PathVariable("key") String key, @PathVariable("value") String value);
+    @RequestMapping("/cache/set/{key}/{value}/{expireTime}")
+    void setMessage(@PathVariable("key") String key, @PathVariable("value") String value, @PathVariable("expireTime") int expire);
 
     @RequestMapping("/cache/getObject/{key}")
     Object getFee(@PathVariable("key") String client);
