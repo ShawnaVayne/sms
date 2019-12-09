@@ -33,6 +33,11 @@ public class RabbitConfig {
         return new Queue(RabbitMqConsants.TOPIC_PRE_SEND,true);
     }
 
+    @Bean
+    public Queue SmsQueue() {
+        return new Queue(RabbitMqConsants.TOPIC_PRE_SEND,true);
+    }
+
 
     /**
      * 并发消费配置
