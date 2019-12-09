@@ -40,7 +40,7 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/setLong/{key}/{value}")
-    Boolean setLong(@PathVariable String key,@PathVariable long value);
+    Boolean setLong(@PathVariable("key") String key,@PathVariable("value") long value);
     /**
      * 获取redis中String类型的数据
      * @param key
@@ -71,6 +71,10 @@ public interface CacheFeign {
      * @param map_json
      * @return
      */
+
+    @RequestMapping("/cache/hmset/{key}/{map}")
+    boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);
+
     @RequestMapping("/cache/hmset/{key}/{map_json}")
     boolean hMSet(@PathVariable("key") String key,@PathVariable("map_json") String map_json);
 }

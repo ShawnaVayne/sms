@@ -1,5 +1,6 @@
 package com.qianfeng.smsplatform.userinterface.service.impl;
 
+import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.userinterface.service.SendStandard_Submit;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -20,4 +21,12 @@ public class SendStandard_Submitimpl implements SendStandard_Submit {
     public void setMessage(String queue, Standard_Submit standard_submit){
         amqpTemplate.convertAndSend(queue,standard_submit);
     }
+
+    @Override
+    public void sendstatus(String queue, Standard_Report report) {
+        amqpTemplate.convertAndSend(queue,report);
+    }
+
+
+
 }

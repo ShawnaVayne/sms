@@ -37,6 +37,8 @@ class Standard_Report implements Serializable {
     /**状态报告推送次数*/
     private int sendCount;
 
+
     //追加属性  发送时间
     private Date sendTime;
+
 }

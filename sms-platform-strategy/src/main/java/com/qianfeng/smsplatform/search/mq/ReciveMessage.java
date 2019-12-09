@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 @Component
@@ -91,7 +92,6 @@ public class ReciveMessage {
 
                             myFilter.doFilter(submit, report);
                             //如果是状态2(发送失败)，就跳出循环
-                            System.err.println("state" + report.getState());
                             if (report.getState() == 2) {
                                 break;
                             }
@@ -139,6 +139,8 @@ public class ReciveMessage {
             sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID(), submit);
 
         } else {
+            //设置msgid
+            submit.setMsgid(UUID.randomUUID().toString());
             log.info("发送下发日志");
             //发送下发日志
             log.error("submit:{}", submit);

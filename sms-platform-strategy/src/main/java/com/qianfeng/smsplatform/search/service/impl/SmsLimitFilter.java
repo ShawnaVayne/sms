@@ -31,18 +31,26 @@ public class SmsLimitFilter implements MyFilter {
     public void doFilter(Standard_Submit submit, Standard_Report report) {
         //从缓存把用户信息拿出来
         Map<Object, Object> clientMap = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_CLIENT + submit.getClientID());
-        Long reciveTime = submit.getSendTime().getTime();
-        Set<String> minutesSet = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_SMS_LIMIT_FIVE_MINUTE + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + "*");
-        Set<String> hourSet = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_SMS_LIMIT_HOUR + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + "*");
-        Set<String> daySet = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_SMS_LIMIT_DAY + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + "*");
-        int minutesSize = minutesSet.size();
-        int hourSize = hourSet.size();
-        int daySize = daySet.size();
+        String minute = cacheFeignClient.getSize(CacheConstants.CACHE_PREFIX_SMS_LIMIT_FIVE_MINUTE + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent());
+        String hour = cacheFeignClient.getSize(CacheConstants.CACHE_PREFIX_SMS_LIMIT_HOUR + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent());
+        String day = cacheFeignClient.getSize(CacheConstants.CACHE_PREFIX_SMS_LIMIT_DAY + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent());
+        Integer minutesSize = 0;
+        Integer hourSize = 0;
+        Integer daySize = 0;
+        if (minute != null) {
+            minutesSize = new Integer(minute);
+        }
+        if (hour != null) {
+            hourSize = new Integer(hour);
+        }
+        if (day != null) {
+            daySize = new Integer(day);
+        }
         if (minutesSize < 3 && hourSize < 5 && daySize < 10) {
             log.info("向redis中储存短信");
-            cacheFeignClient.setMessage(CacheConstants.CACHE_PREFIX_SMS_LIMIT_FIVE_MINUTE + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + reciveTime, "1", 300);
-            cacheFeignClient.setMessage(CacheConstants.CACHE_PREFIX_SMS_LIMIT_HOUR + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + reciveTime, "1", 3600);
-            cacheFeignClient.setMessage(CacheConstants.CACHE_PREFIX_SMS_LIMIT_DAY + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + reciveTime, "1", 86400);
+            cacheFeignClient.setMessage(CacheConstants.CACHE_PREFIX_SMS_LIMIT_FIVE_MINUTE + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent(), minutesSize + 1 + "", 300);
+            cacheFeignClient.setMessage(CacheConstants.CACHE_PREFIX_SMS_LIMIT_HOUR + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent(), hourSize + 1 + "", 3600);
+            cacheFeignClient.setMessage(CacheConstants.CACHE_PREFIX_SMS_LIMIT_DAY + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent(), daySize + 1 + "", 86400);
         } else {
             report.setState(2);
             report.setErrorCode(StrategyConstants.STRATEGY_ERROR_LIMIT);

@@ -53,7 +53,7 @@ public class QueueSizeSimpleJob implements SimpleJob {
             try {
                 Long messageCount = getMessageCount(gateWayQueue);
                 if (messageCount > messageCountLimit) {
-                    log.info("{}队列消息堆积量达到上限，请注意查收~~~",gateWayQueue);
+                    //log.info("{}队列消息堆积量达到上限，请注意查收~~~",gateWayQueue);
                     System.err.println(gateWayQueue+"队列消息堆积量达到上限，请注意查收~~~");
                 }
             } catch (IOException e) {

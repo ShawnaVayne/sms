@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class ValidServiceImpl implements ValidService {
 
 
     @Override
-    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String[] split,String content,String userIpAddr,String pwd,String clientID) throws IOException {
+    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String[] split,String content,String userIpAddr,String pwd,String clientID, Date date) throws IOException {
 
 
         List<Standard_Submit> list = new ArrayList<>();
@@ -73,6 +74,7 @@ public class ValidServiceImpl implements ValidService {
                         standard_submit.setMessageContent(content);
                         standard_submit.setClientID(Integer.parseInt(clientID));
                         standard_submit.setSource(1);
+                        standard_submit.setSendTime(date);
                         list.add(standard_submit);
                     } else {
                         throw new SmsInterfaceException("104","内容超长：104");

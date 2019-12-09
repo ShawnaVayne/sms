@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +36,7 @@ public class SmsServlet extends HttpServlet {
 
 
 
+    private Date date;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             request.setCharacterEncoding("utf-8");
@@ -53,11 +55,21 @@ public class SmsServlet extends HttpServlet {
             //获取消息内容
             String content = request.getParameter("content");
             //获取发送方密码
-            String pwd = request.getParameter("pwd");
+           long sendTime =(System.currentTimeMillis()) ; // 获取发送时间
+
+        try {
+            date = new Date(sendTime);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        String pwd = request.getParameter("pwd");
         System.out.println("用户ip地址;"+userIpAddr);
             String[] split = sd.split(",");
         try {
-             list = validService.valid(request, response, split,content,userIpAddr,pwd,clientID );
+             list = validService.valid(request, response, split,content,userIpAddr,pwd,clientID, date );
 
             for (Standard_Submit standardSubmit : list) {
                 sendStandard_submit.setMessage(RabbitMqConsants.TOPIC_PRE_SEND, standardSubmit);

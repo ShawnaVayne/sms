@@ -2,6 +2,7 @@ package com.qianfeng.smsplatform.userinterface.util;
 
 import com.alibaba.fastjson.JSON;
 import com.qianfeng.smsplatform.common.model.Standard_Report;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -19,6 +20,7 @@ import java.io.IOException;
  * <p>
  * 未知的事情 永远充满变数
  */
+@Slf4j
 public class Httpsend {
 
   public   static  void Send(String url, Standard_Report standard_report){
@@ -32,7 +34,7 @@ public class Httpsend {
 
 
 
-            System.out.println("返回给客户端的对象："+jsonString);
+            log.info("返回给客户端的对象："+jsonString);
 
 
 
@@ -45,8 +47,8 @@ public class Httpsend {
         }
 
         // 创建Post请求
-        HttpPost httpPost = new HttpPost(url );
-        System.out.println("执行完成！");
+        HttpPost httpPost = new HttpPost(url);
+        log.info("执行完成！");
 
         StringEntity entity = new StringEntity(jsonString, "UTF-8");
         // post请求是将参数放在请求体里面传过去的;这里将entity放入post请求体中
@@ -70,11 +72,11 @@ public class Httpsend {
                   System.out.println("响应内容为:" + EntityUtils.toString(responseEntity));
             }
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            throw new RuntimeException(" ",e );
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException(" ",e );
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(" ",e );
         } finally {
             try {
                 // 释放资源

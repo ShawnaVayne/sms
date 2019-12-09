@@ -26,7 +26,10 @@ public class TReportFailureController {
      */
     @ResponseBody
     @RequestMapping("/reportfailure/save/{reportFailure}")
+
+
     public int addReportFailure(@PathVariable("reportFailure") Standard_Report reportFailure){
+
         int i = tReportFailureService.insert(reportFailure);
         return i;
     }

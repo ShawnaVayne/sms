@@ -31,6 +31,11 @@ public class FeignHystrix implements CacheFeignClient {
     }
 
     @Override
+    public String getSize(String key) {
+        return null;
+    }
+
+    @Override
     public Map<Object, Object> hmget(String key) {
         return null;
     }

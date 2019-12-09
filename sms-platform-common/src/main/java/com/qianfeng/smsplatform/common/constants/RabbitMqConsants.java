@@ -10,5 +10,8 @@ public class RabbitMqConsants {
     public final static String TOPIC_UPDATE_SMS_REPORT = "eleven_report_update_topic";
     //待发送短信网关队列 + 网关ID号
     public final static String TOPIC_SMS_GATEWAY = "eleven_sms_send_gateway_";
+    //推送失败状态报告队列
+    public final static String  TOPIC_SMS_REPORT_FAILURE = "eleven_push_sms_report_failure_topic";
+
 
 }
