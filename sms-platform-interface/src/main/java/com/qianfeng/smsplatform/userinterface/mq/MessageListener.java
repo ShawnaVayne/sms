@@ -38,13 +38,11 @@ public class MessageListener {
 
 
 
-    @RabbitListener(queues = RabbitMqConsants.TOPIC_PUSH_SMS_REPORT,autoStartup = "true")//指定当前方法是用于处理哪个队列的消息的,不需要在类上面添加注解
+    @RabbitListener(queues = RabbitMqConsants.TOPIC_PUSH_SMS_REPORT,autoStartup = "true", containerFactory = "customContainerFactory")//指定当前方法是用于处理哪个队列的消息的,不需要在类上面添加注解
     public void reciveMessage(Standard_Report message) {
         System.out.println(message);
 
-                System.err.println("收到了消息====>" + message);
-
-
+        System.err.println("收到了消息====>" + message);
 
 
             //  需要返回 根据客户id查地址
@@ -76,39 +74,35 @@ public class MessageListener {
                   System.out.println(" 用户的url:"+url);
 
 
-        executorService.execute(new Thread(){
-            public void run(){
 
                 try {
-                    Httpsend.Send(url,message);
+                   Httpsend.Send(url,message);
                    log.info("发送完成！");
                 } catch (Exception e) {
-                        log.info(message.getSendCount()+"");
+                    log.info(message.getSendCount()+"");
                     if(message.getSendCount()<1){
 
                         log.info("第一次");
                         message.setSendCount(message.getSendCount() + 1);
                         sendStandard_submit.sendstatus(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, message);
                         log.info("第二次开始");
-                        return;
-                    }
 
-                    date = new Date(System.currentTimeMillis());
-                    message.setSendTime(date);
+                    }else {
+
+                        date = new Date(System.currentTimeMillis());
+                        message.setSendTime(date);
 
                         sendStandard_submit.sendstatus(RabbitMqConsants.TOPIC_SMS_REPORT_FAILURE, message);
-                    log.info("失败2次状态发往失败MQ");
+                        log.info("失败2次状态发往失败MQ");
 
-
+                    }
                 }
 
 
         }
 
 
-       });
 
-}
 
 
 }
