@@ -44,13 +44,8 @@ public class MessageListener {
 
                 System.err.println("收到了消息====>" + message);
 
-        int s = message.getState();
-        System.out.println("是否返回的状态:"+s);
-        //根据isReturnStatus 判断是否返回
-        if(s==0){
-            System.out.println("不需要返回！");
-            return;
-        }
+
+
 
             //  需要返回 根据客户id查地址
             long clientID = message.getClientID();
@@ -61,6 +56,14 @@ public class MessageListener {
                  //throw new SmsInterfaceException("103","用户不存在：103");
             }
                log.info("缓存查出用户信息："+objectObjectMap);
+
+            int s = new Integer((String) objectObjectMap.get("isReturnStatus"));
+               log.info("查询用户是否返回："+s);
+                //根据isReturnStatus 判断是否返回
+                if(s==0){
+                    System.out.println("不需要返回！");
+                    return;
+                }
 
 
                 if(objectObjectMap==null){
@@ -80,12 +83,12 @@ public class MessageListener {
                     Httpsend.Send(url,message);
                    log.info("发送完成！");
                 } catch (Exception e) {
-
-                    if(message.getSendCount()<2){
+                        log.info(message.getSendCount()+"");
+                    if(message.getSendCount()<1){
 
                         log.info("第一次");
+                        message.setSendCount(message.getSendCount() + 1);
                         sendStandard_submit.sendstatus(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, message);
-                        message.setSendCount(2);
                         log.info("第二次开始");
                         return;
                     }
@@ -95,7 +98,8 @@ public class MessageListener {
 
                         sendStandard_submit.sendstatus(RabbitMqConsants.TOPIC_SMS_REPORT_FAILURE, message);
                     log.info("失败2次状态发往失败MQ");
-                    e.printStackTrace();
+
+
                 }
 
 
@@ -103,7 +107,6 @@ public class MessageListener {
 
 
        });
-
 
 }
 

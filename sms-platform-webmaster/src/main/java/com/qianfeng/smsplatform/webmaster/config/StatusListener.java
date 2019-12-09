@@ -1,11 +1,12 @@
-package com.qianfeng.smsplatform.userinterface.mq;
+package com.qianfeng.smsplatform.webmaster.config;
 
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
 import com.qianfeng.smsplatform.common.model.Standard_Report;
-import com.qianfeng.smsplatform.userinterface.feign.StatusFeignService;
+import com.qianfeng.smsplatform.webmaster.controller.TReportFailureController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 2019/12/711:32
@@ -13,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * 未知的事情 永远充满变数
  */
 @Slf4j
-//@Component
+@Component
 public class StatusListener {
 
     @Autowired
-    private StatusFeignService statusFeignService;
+    private TReportFailureController tReportFailureController;
 
 
 
@@ -28,9 +29,9 @@ public class StatusListener {
 
 
 
-        statusFeignService.addReportFailure(message);
+        tReportFailureController.addReportFailure(message);
 
-
+        return;
 
 
 
