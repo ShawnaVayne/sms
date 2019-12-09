@@ -5,6 +5,7 @@ import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.userinterface.exception.SmsInterfaceException;
 import com.qianfeng.smsplatform.userinterface.feign.CacheFeignService;
 import com.qianfeng.smsplatform.userinterface.service.ValidService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Map;
  * 未知的事情 永远充满变数
  */
 @Service
+@Slf4j
 public class ValidServiceImpl implements ValidService {
 
      @Autowired
@@ -29,14 +31,14 @@ public class ValidServiceImpl implements ValidService {
 
 
     @Override
-    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String[] split,String content,String userIpAddr,String pwd,String clientID, Date date) throws IOException {
+    public List<Standard_Submit> valid(HttpServletRequest request, HttpServletResponse response, String[] split,String content,String userIpAddr,String pwd,String clientID, Date date,long srcId) throws IOException {
 
 
         List<Standard_Submit> list = new ArrayList<>();
 
         Standard_Submit standard_submit = new Standard_Submit();
 
-
+        log.info(split.length+"-------------------------------------------------");
         if(split.length<=99){
 
         for (int i = 0; i < split.length; i++) {
@@ -49,7 +51,7 @@ public class ValidServiceImpl implements ValidService {
             if(objectObjectMap==null||objectObjectMap.size()==0){
                 throw new SmsInterfaceException("103","用户不存在：103");
             }
-           /* else if(!ip1.equals(userIpAddr)){
+          /*  else if(!ip1.equals(userIpAddr)){
                 throw new SmsInterfaceException("103","ip错误：103");
             }*/
             else if(!pwd.equals(pwd1)){
@@ -75,6 +77,7 @@ public class ValidServiceImpl implements ValidService {
                         standard_submit.setClientID(Integer.parseInt(clientID));
                         standard_submit.setSource(1);
                         standard_submit.setSendTime(date);
+                        standard_submit.setSrcSequenceId(srcId);
                         list.add(standard_submit);
                     } else {
                         throw new SmsInterfaceException("104","内容超长：104");

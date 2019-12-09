@@ -20,6 +20,7 @@ import org.springframework.messaging.support.GenericMessage;
 import java.lang.invoke.ConstantCallSite;
 import java.util.Date;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @Classname FeeSimpeJob
@@ -65,7 +66,7 @@ public class FeeSimpeJob implements SimpleJob {
                 String msg = "尊敬的用户"+clientId+"【账号余额"+exfee+"厘】===>温馨提示：您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)";
                 submit.setMessageContent(msg);
 
-                //amqpTemplate.convertAndSend(RabbitMqConsants.TOPIC_PRE_SEND,submit);
+                amqpTemplate.convertAndSend(RabbitMqConsants.TOPIC_SMS_SEND_LOG,submit);
                 System.err.println(msg);
             }
         }
