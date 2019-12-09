@@ -21,7 +21,7 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/set/{key}/{value}")
-    Boolean set(@PathVariable String key, @PathVariable String value);
+    Boolean set(@PathVariable("key") String key, @PathVariable("value") String value);
 
     /**
      * 设置String类型数据，value为Object类型
@@ -30,7 +30,7 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/setObj/{key}/{value}")
-    Boolean setObject(@PathVariable String key,@PathVariable Object value);
+    Boolean setObject(@PathVariable("key") String key,@PathVariable("value") Object value);
 
 
     /**
@@ -40,21 +40,21 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/setLong/{key}/{value}")
-    Boolean setLong(@PathVariable String key,@PathVariable long value);
+    Boolean setLong(@PathVariable("key") String key,@PathVariable("value") long value);
     /**
      * 获取redis中String类型的数据
      * @param key
      * @return
      */
     @RequestMapping("/cache/get/{key}")
-    String get(@PathVariable String key);
+    String get(@PathVariable("key") String key);
 
     /**
      * 根据key值删除缓存中的数据
      * @param keys
      */
     @RequestMapping("/cache/del/{keys}")
-    void del(@PathVariable String... keys);
+    void del(@PathVariable("keys") String... keys);
 
     /**
      * 根据key值获取redis中map
@@ -62,7 +62,7 @@ public interface CacheFeign {
      * @return
      */
     @RequestMapping("/cache/hmget/{key}")
-    Map<Object,Object> hMGet(@PathVariable String key);
+    Map<Object,Object> hMGet(@PathVariable("key") String key);
 
 
     /**
@@ -71,6 +71,11 @@ public interface CacheFeign {
      * @param map_json
      * @return
      */
+
+    @RequestMapping("/cache/hmset/{key}/{map}")
+    boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);
+
     @RequestMapping("/cache/hmset/{key}/{map_json}")
-    boolean hMSet(@PathVariable String key,@PathVariable String map_json);
+    boolean hMSet(@PathVariable("key") String key,@PathVariable("key") String map_json);
+
 }
