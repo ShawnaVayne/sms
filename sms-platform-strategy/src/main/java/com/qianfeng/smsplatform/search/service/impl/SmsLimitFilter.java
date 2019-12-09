@@ -32,7 +32,6 @@ public class SmsLimitFilter implements MyFilter {
         //从缓存把用户信息拿出来
         Map<Object, Object> clientMap = cacheFeignClient.hmget(CacheConstants.CACHE_PREFIX_CLIENT + submit.getClientID());
         Long reciveTime = submit.getSendTime().getTime();
-
         Set<String> minutesSet = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_SMS_LIMIT_FIVE_MINUTE + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + "*");
         Set<String> hourSet = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_SMS_LIMIT_HOUR + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + "*");
         Set<String> daySet = cacheFeignClient.getKey(CacheConstants.CACHE_PREFIX_SMS_LIMIT_DAY + submit.getClientID() + submit.getDestMobile() + submit.getMessageContent() + "*");

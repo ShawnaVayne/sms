@@ -14,6 +14,15 @@ monitorFeeJob:
   #作业分片总数
   shardingTotalCount: 1
   shardingItemParameters: null
+# 0 0 9 * * ?
+
+monitorReportFailure:
+  #cron表达式，用于控制作业触发时间
+  cron: 0/5 * * * * ?
+  #作业分片总数
+  shardingTotalCount: 1
+  shardingItemParameters: null
+
 
 #报警参数
 alert:

@@ -32,6 +32,15 @@ public interface CacheFeign {
     @RequestMapping("/cache/setObj/{key}/{value}")
     Boolean setObject(@PathVariable("key") String key,@PathVariable("value") Object value);
 
+
+    /**
+     * 设置String类型数据，value为Long类型
+     * @param key
+     * @param value
+     * @return
+     */
+    @RequestMapping("/cache/setLong/{key}/{value}")
+    Boolean setLong(@PathVariable String key,@PathVariable long value);
     /**
      * 获取redis中String类型的数据
      * @param key

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qianfeng.smsplatform.webmaster.dao.TReportFailureMapper">
+    <sql id="Example_insert_field">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="state != null">
+                state,
+            </if>
+            <if test="errorCode != null">
+                errorCode,
+            </if>
+            <if test="srcID != null">
+                srcID,
+            </if>
+            <if test="clientID != null">
+                clientID,
+            </if>
+            <if test="msgId != null">
+                msgId,
+            </if>
+            <if test="sendCount != null">
+                sendCount,
+            </if>
+            <if test="sendTime != null">
+                sendTime,
+            </if>
+        </trim>
+    </sql>
+    
+    <sql id="Example_insert_field_value">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mobile != null">
+                #{mobile},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            <if test="errorCode != null">
+                #{errorCode},
+            </if>
+            <if test="srcID != null">
+                #{srcID},
+            </if>
+            <if test="clientID != null">
+                #{clientID},
+            </if>
+            <if test="msgId != null">
+                #{msgId},
+            </if>
+            <if test="sendCount != null">
+                #{sendCount},
+            </if>
+            <if test="sendTime != null">
+                #{sendTime},
+            </if>
+        </trim>
+    </sql>
+    <insert id="insert" parameterType="com.qianfeng.smsplatform.common.model.Standard_Report">
+        insert into t_report_failure
+        <include refid="Example_insert_field"></include>
+        value
+        <include refid="Example_insert_field_value"></include>
+    </insert>
+
+    <select id="selectAll" resultType="com.qianfeng.smsplatform.common.model.Standard_Report">
+        select * from t_report_failure
+    </select>
+</mapper>

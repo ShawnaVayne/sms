@@ -45,10 +45,10 @@ public class AcountRecordImpl implements AcountRecordService {
         Integer fee = Integer.valueOf(cacheFeign.get(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + tAcountRecord.getClientid()));
         if(fee!=null){
             long exfee = fee + paidvalue;
-            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),exfee);
+            cacheFeign.setLong(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),exfee);
         }else{
             long exfee = paidvalue;
-            cacheFeign.setObject(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),exfee);
+            cacheFeign.setLong(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE+tAcountRecord.getClientid(),exfee);
         }
         return i;
     }

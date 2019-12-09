@@ -22,3 +22,7 @@ spring:
     username: admin
     password: admin
     virtual-host: my_vhost
+  application:
+    name: sms-platform-monitor
+server:
+  port: 9000
