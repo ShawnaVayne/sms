@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.messaging.support.GenericMessage;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class SearchTest {
     }
     @Test
     public void testDelete() throws IOException {
-        boolean result = searchService.deleteIndex("eleven_sms_submit_log");
+        boolean result = searchService.deleteIndex("eleven_sms_submit_log_type");
         log.error("删除结果：{}",result);
     }
     @Test
@@ -62,9 +61,9 @@ public class SearchTest {
         /*map.put("keyword","不足");*/
         /*map.put("start","2");
         map.put("rows","5");*/
-       map.put("msgid","f49d4783-fb68-43cf-a335-b231c49848ca");
+       map.put("msgid","3901540872014594049");
        map.put("keyword","德玛西亚之力");
-        boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "f49d4783-fb68-43cf-a335-b231c49848ca", new GenericMessage(map));
+        boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "3901540872014594049", objectMapper.writeValueAsString(map));
         System.err.println(b);
 
     }

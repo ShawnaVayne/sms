@@ -21,7 +21,6 @@ public class ElasticSearchConfig {
 
     @Bean
     public RestHighLevelClient client(){
-        System.err.println("port:"+port+" 类型："+port.getClass());
         RestClientBuilder builder = RestClient.builder(new HttpHost(host, Integer.parseInt(port)));
         RestHighLevelClient client = new RestHighLevelClient(builder);
         return client;

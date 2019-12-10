@@ -27,7 +27,6 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -95,11 +94,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean addToLog(String TypeName, String indexName, String idName, String json) throws IOException {
-        IndexRequest request = new IndexRequest(indexName,TypeName,idName);
+    public boolean addToLog(String indexName, String typeName, String idName, String json) throws IOException {
+        IndexRequest request = new IndexRequest(indexName,typeName,idName);
         request.source(json,XContentType.JSON);
         DocWriteResponse.Result result = client.index(request, RequestOptions.DEFAULT).getResult();
-        if(result.equals(DocWriteResponse.Result.CREATED)){
+        if(result==DocWriteResponse.Result.CREATED || result==DocWriteResponse.Result.UPDATED){
             log.error("添加数据成功！");
             return true;
         }
@@ -108,9 +107,10 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean updateLog(String indexName, String typeName, String table, GenericMessage json) throws IOException {
+    public boolean updateLog(String indexName, String typeName, String table, String json) throws IOException {
         UpdateRequest updateRequest = new UpdateRequest(indexName,typeName,table);
-        UpdateRequest request = updateRequest.doc(json);
+        Map map = objectMapper.readValue(json, Map.class);
+        UpdateRequest request = updateRequest.doc(map);
         UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
         DocWriteResponse.Result result = response.getResult();
         if (result==DocWriteResponse.Result.UPDATED){
