@@ -36,7 +36,7 @@ public class SearchController {
     @Autowired
     private SearchFeign searchFeign;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
 
 
@@ -69,7 +69,7 @@ public class SearchController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.err.println("集合长度为："+list.size());
+            //System.err.println("集合长度为："+list.size());
             ////////////////////////////////////////////
             for (Map map : list) {
                 //System.err.println(map);
@@ -81,9 +81,9 @@ public class SearchController {
                 String sendTime = (String) map.get("sendTime");
                 if(sendTime != null && !"".equals(sendTime.trim())){
                     Date sendTimeDate = sdf.parse(sendTime.split("\\+")[0].replace("T"," "));
-                    map.put("sendTime", sendTimeDate.getTime());
+                    map.put("sendTimeStr", sendTimeDate.toLocaleString());
                 }else{
-                    map.put("sendTime", "");
+                    map.put("sendTimeStr", "");
                 }
             }
             return new TableData(count, list);
