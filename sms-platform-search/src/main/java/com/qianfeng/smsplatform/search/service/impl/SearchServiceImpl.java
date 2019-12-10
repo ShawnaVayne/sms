@@ -120,6 +120,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Map> search(String param) throws IOException, ParseException {
+        System.err.println(param);
         List list = new ArrayList();
         Map map = objectMapper.readValue(param, Map.class);
         SearchSourceBuilder searchSourceBuilder = SearchUtil.getSearchSourceBuilder(map);

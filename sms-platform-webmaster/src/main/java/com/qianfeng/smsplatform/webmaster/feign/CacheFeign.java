@@ -68,7 +68,7 @@ public interface CacheFeign {
     /**
      * 向redis中插入hash类型的数据
      * @param key
-     * @param map_json
+     * @param map
      * @return
      */
 
@@ -77,8 +77,4 @@ public interface CacheFeign {
 
     @RequestMapping("/cache/hmset/{key}/{map_json}")
     boolean hMSet(@PathVariable("key") String key,@PathVariable("map_json") String map_json);
-<<<<<<< HEAD
-=======
-
->>>>>>> 0f465996b24e4bb77226143db279325fd832d002
 }

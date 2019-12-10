@@ -23,6 +23,7 @@ public class SearchController {
 
     @RequestMapping("/search/{jsonParam}")
     public List<Map> search(@PathVariable String jsonParam) throws IOException, ParseException {
+        System.err.println(jsonParam);
         List<Map> search = searchService.search(jsonParam);
         return search;
     }
