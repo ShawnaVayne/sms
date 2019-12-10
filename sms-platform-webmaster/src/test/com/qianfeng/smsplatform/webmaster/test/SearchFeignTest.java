@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,5 +33,11 @@ public class SearchFeignTest {
         for (Map map : search) {
             System.err.println(map);
         }
+    }
+
+    @Test
+    public void test(){
+        Date date = new Date();
+        System.err.println(date.toInstant());
     }
 }

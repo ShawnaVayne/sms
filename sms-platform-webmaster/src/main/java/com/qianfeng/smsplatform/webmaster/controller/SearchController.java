@@ -1,5 +1,7 @@
 package com.qianfeng.smsplatform.webmaster.controller;
 
+import com.qianfeng.smsplatform.common.constants.CacheConstants;
+import com.qianfeng.smsplatform.webmaster.feign.CacheFeign;
 import com.qianfeng.smsplatform.webmaster.feign.SearchFeign;
 import com.qianfeng.smsplatform.webmaster.pojo.TAdminUser;
 import com.qianfeng.smsplatform.webmaster.service.api.SearchService;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,21 +31,24 @@ public class SearchController {
     private SearchService searchService;
 
     @Autowired
+    private CacheFeign cacheFeign;
+
+    @Autowired
     private SearchFeign searchFeign;
 
-//    @Autowired
-//    private CacheService cacheService;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
 
 
     @RequestMapping("/sys/search/list")
-    public TableData smssearch(SearchPojo criteria) {
+    public TableData smssearch(SearchPojo criteria) throws ParseException {
         TAdminUser userEntity = ShiroUtils.getUserEntity();
         Integer clientid = userEntity.getClientid();
         if(clientid!=0){//非管理员只能查自己
             criteria.setClientID(clientid);
         }
-        criteria.setHighLightPostTag("</font>");
-        criteria.setHighLightPreTag("<font style='color:red'>");
+        //criteria.setHighLightPostTag("</font>");
+        //criteria.setHighLightPreTag("<font style='color:red'>");
         String str = JsonUtil.getJSON(criteria);
         System.err.println("需要传递的对象："+str);
         //Long count = searchService.searchLogCount(str);
@@ -62,20 +69,21 @@ public class SearchController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.err.println("集合长度为："+list.size());
             ////////////////////////////////////////////
             for (Map map : list) {
+                //System.err.println(map);
                 String clientID = String.valueOf(map.get("clientID"));
-//                Map<String, String> hmget = cacheService.hmget("CLIENT:" + clientID);
-//                String corpname = hmget.get("corpname");
-                String corpname ="";
-                map.put("corpname",corpname);
-                Object sendTime1 = map.get("sendTime");
-                if(!StringUtils.isEmpty(sendTime1)) {
-                    Long sendTime = Long.parseLong(sendTime1.toString());
-                    String sendTimeStr = DateUtils.longToStr(sendTime);
-                    map.put("sendTimeStr", sendTimeStr);
-                }else {
-                    map.put("sendTimeStr", "");
+                Map<Object, Object> objMap = cacheFeign.hMGet(CacheConstants.CACHE_PREFIX_CLIENT + clientID);
+                String corpName ="";
+                corpName = (String) objMap.get("corpName");
+                map.put("corpname",corpName);
+                String sendTime = (String) map.get("sendTime");
+                if(sendTime != null && !"".equals(sendTime.trim())){
+                    Date sendTimeDate = sdf.parse(sendTime.split("\\+")[0].replace("T"," "));
+                    map.put("sendTime", sendTimeDate.getTime());
+                }else{
+                    map.put("sendTime", "");
                 }
             }
             return new TableData(count, list);

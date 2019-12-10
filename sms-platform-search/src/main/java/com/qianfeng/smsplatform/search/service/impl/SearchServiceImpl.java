@@ -133,7 +133,7 @@ public class SearchServiceImpl implements SearchService {
         if(pageNum==null){
             start = 1;
         }else{
-            start = Integer.parseInt((String) pageNum);
+            start = Integer.parseInt(String.valueOf(pageNum));
             if (start<=0){
                 start = 1;
             }
@@ -141,7 +141,7 @@ public class SearchServiceImpl implements SearchService {
         if(pageSize == null){
             rows = 10;
         }else{
-            rows = Integer.parseInt(pageSize.toString());
+            rows = Integer.parseInt(String.valueOf(pageSize));
             if(rows<=0){
                 rows = 10;
             }
@@ -156,7 +156,7 @@ public class SearchServiceImpl implements SearchService {
                 highLightPostTag = "</span>";
             }
             if(highLightPreTag==null || "".equalsIgnoreCase(highLightPreTag.toString())){
-                highLightPreTag = "<span color='green'>";
+                highLightPreTag = "<span style='color:red;font-weight:bold;'>";
             }
             HighlightBuilder highlightBuilder = new HighlightBuilder();
             highlightBuilder.field("messageContent");

@@ -23,12 +23,14 @@ public class SearchController {
 
     @RequestMapping("/list/{jsonParam}")
     public List<Map> search(@PathVariable String jsonParam) throws IOException, ParseException {
+        System.err.println("接收到的接送字符串："+jsonParam);
         List<Map> search = searchService.search(jsonParam);
         return search;
     }
 
     @RequestMapping("/getCount/{jsonParam}")
     public long getCount(@PathVariable String jsonParam) throws IOException, ParseException {
+        System.err.println("接收到的接送字符串："+jsonParam);
         long count = searchService.getCount(jsonParam);
         return count;
     }
