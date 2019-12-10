@@ -29,13 +29,14 @@ public class CacheServiceTest {
     public void TestSet(){
         long money1 = 1000000;
         long money2 = 9829828;
-        cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "0", money1);
-        cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "2", money2);
+        /*cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "0", money1);
+        cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "2", money2);*/
+        cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "0", money2);
     }
 
     @Test
     public void TestGet(){
-        Object test4 = cacheService.getObject(CacheConstants.CACHE_PREFIX_BLACK+"1368888888");
+        Object test4 = cacheService.getObject(CacheConstants.CACHE_PREFIX_CLIENT+"2");
         System.err.println(test4);
     }
 
@@ -88,7 +89,7 @@ public class CacheServiceTest {
     }
     @Test
     public void TestHget(){
-        Map<Object, Object> map = cacheService.hmget(CacheConstants.CACHE_PREFIX_ROUTER+"2");
+        Map<Object, Object> map = cacheService.hmget(CacheConstants.CACHE_PREFIX_CLIENT+"2");
         Set<Map.Entry<Object, Object>> entries = map.entrySet();
         for (Map.Entry<Object, Object> entry : entries) {
 

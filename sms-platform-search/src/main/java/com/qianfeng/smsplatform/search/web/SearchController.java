@@ -21,7 +21,7 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    @RequestMapping("/search/{jsonParam}")
+    @RequestMapping("/list/{jsonParam}")
     public List<Map> search(@PathVariable String jsonParam) throws IOException, ParseException {
         List<Map> search = searchService.search(jsonParam);
         return search;

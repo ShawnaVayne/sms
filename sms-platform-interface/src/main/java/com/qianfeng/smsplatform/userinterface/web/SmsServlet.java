@@ -67,11 +67,14 @@ public class SmsServlet extends HttpServlet {
 
         String pwd = request.getParameter("pwd");
         System.out.println("用户ip地址;"+userIpAddr);
-            String[] split = sd.split(",");
+        System.out.println(sd);
+        String[] split = sd.split(",");
+        System.err.println(split.length);
         try {
-             list = validService.valid(request, response, split,content,userIpAddr,pwd,clientID, date );
+             list = validService.valid(request, response, split,content,userIpAddr,pwd,clientID, date,srcID );
 
             for (Standard_Submit standardSubmit : list) {
+                log(standardSubmit.toString());
                 sendStandard_submit.setMessage(RabbitMqConsants.TOPIC_PRE_SEND, standardSubmit);
                 System.out.println("发送成功！");
             }

@@ -2,19 +2,12 @@ package com.qianfeng.smsplatform.gateway.config;
 
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
 import com.qianfeng.smsplatform.gateway.netty4.NettyClient;
-import com.qianfeng.smsplatform.gateway.netty4.Utils.Command;
-import com.qianfeng.smsplatform.gateway.netty4.Utils.MsgUtils;
-import com.qianfeng.smsplatform.gateway.netty4.entity.CmppMessageHeader;
-import com.qianfeng.smsplatform.gateway.netty4.entity.CmppSubmit;
 import com.qianfeng.smsplatform.gateway.thread.SendReportThread;
 import com.qianfeng.smsplatform.gateway.thread.SendSubmitRespThread;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 
 @Configuration
@@ -22,7 +15,7 @@ public class NettyConfig {
     @Autowired
     private AmqpTemplate rabbitTemplate;
     //ip
-    public static String host = "127.0.0.1";
+    public static String host = "10.9.21.155";
     //端口
     public static int port = 7890;
     //账号
