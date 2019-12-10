@@ -20,6 +20,10 @@ public interface CacheFeignClient {
 
     @GetMapping("/cache/keys/{pattern}")
     Set<String> getKey(@PathVariable("pattern") String pattern);
+    //得到相同客户发送到相同手机号相同内容的数量
+    @GetMapping("/cache/get/{key}")
+    String getSize(@PathVariable("key") String key);
+
     @RequestMapping("/cache/hmget/{key}")
     Map<Object, Object> hmget(@PathVariable("key") String key);
 

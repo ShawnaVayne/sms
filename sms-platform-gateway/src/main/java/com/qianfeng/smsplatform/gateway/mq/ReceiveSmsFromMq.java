@@ -29,6 +29,7 @@ public class ReceiveSmsFromMq {
     private NettyClient nettyClient;
     @Value("${gateway.longcode}")
     private String longcode;
+
 //    @Value("${gateway.sendtopic}")
 //    private String sendtopic;
     /**
