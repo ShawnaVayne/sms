@@ -36,7 +36,7 @@ public class SearchTest {
     }
     @Test
     public void testDelete() throws IOException {
-        boolean result = searchService.deleteIndex("eleven_sms_submit_log_type");
+        boolean result = searchService.deleteIndex("eleven_sms_submit_log");
         log.error("删除结果：{}",result);
     }
     @Test
@@ -58,13 +58,14 @@ public class SearchTest {
     @Test
     public void testUpdate() throws IOException {
         Map<String,String> map = new HashMap<>(16);
-        /*map.put("keyword","不足");*/
-        /*map.put("start","2");
-        map.put("rows","5");*/
+        map.put("keyword","不足");
+        map.put("start","2");
+        map.put("rows","5");
        map.put("msgid","3901540872014594049");
        map.put("keyword","德玛西亚之力");
-        boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "3901540872014594049", objectMapper.writeValueAsString(map));
-        System.err.println(b);
+        /*boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "3901540872014594049", objectMapper.writeValueAsString(map));*/
+        String s = objectMapper.writeValueAsString(map);
+        System.err.println(s);
 
     }
 }

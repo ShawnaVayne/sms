@@ -65,7 +65,7 @@ public class SearchUtil {
                 .field("type","long")
                 .endObject()
                 .startObject("sendTime")
-                .field("type","date")
+                .field("type","long")
                 .endObject()
                 .startObject("source")
                 .field("type","long")
@@ -97,30 +97,68 @@ public class SearchUtil {
        RangeQueryBuilder receiveTerm = null;
        MatchQueryBuilder keywordMatch = null;
 
-       if(clientID!=null){
+       /*if(clientID!=null){
            clientTerm = new TermQueryBuilder("clientID",clientID.toString());
            boolQueryBuilder.must(clientTerm);
        }else if(mobile!=null){
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
-       } else if(startTime!=null & endTime!=null){
-           Date start = sdf.parse(startTime.toString());
-           Date end = sdf.parse(endTime.toString());
+       }else if(startTime!=null & endTime!=null){
+           *//*Date start = sdf.parse(startTime.toString());
+           Date end = sdf.parse(endTime.toString());*//*
+           Date start = new Date((long) startTime);
+           Date end = new Date((long) endTime);
            receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
            boolQueryBuilder.must(receiveTerm);
        }else if(startTime != null & endTime == null){
-           Date start = sdf.parse(startTime.toString());
+           *//*Date start = sdf.parse(startTime.toString());*//*
+           Date start = new Date((long) startTime);
            receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
            boolQueryBuilder.must(receiveTerm);
        }else if(startTime == null & endTime != null){
-           Date end = sdf.parse(endTime.toString());
+           *//*Date end = sdf.parse(endTime.toString());*//*
+           Date end = new Date((long) endTime);
            receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
            boolQueryBuilder.must(receiveTerm);
        }else if(keywords != null){
+           keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
+           boolQueryBuilder.must(keywordMatch);
+       }*/
+       if(clientID!=null){
+           clientTerm = new TermQueryBuilder("clientID",String.valueOf(clientID));
+           boolQueryBuilder.must(clientTerm);
+       }
+       if(mobile!=null){
+           mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
+           boolQueryBuilder.must(mobileTerm);
+       }
+       if(startTime!=null & endTime!=null){
+           /*Date start = sdf.parse(startTime.toString());
+           Date end = sdf.parse(endTime.toString());*/
+           Date start = new Date((long) startTime);
+           Date end = new Date((long) endTime);
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(startTime != null & endTime == null){
+           /*Date start = sdf.parse(startTime.toString());*/
+           Date start = new Date((long) startTime);
+           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(startTime == null & endTime != null){
+           /*Date end = sdf.parse(endTime.toString());*/
+           Date end = new Date((long) endTime);
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(keywords != null){
            keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
            boolQueryBuilder.must(keywordMatch);
        }
        sourceBuilder.query(boolQueryBuilder);
        return sourceBuilder;
    }
+
+
 }

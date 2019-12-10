@@ -11,6 +11,7 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -147,6 +148,7 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         searchSourceBuilder.from((start-1)*rows);
+        searchSourceBuilder.size(rows);
         //判断是否有关键字
         if(map.get("keyword")!=null){
             //判断用户是否传递了高亮前缀和高亮后缀，如果没有则用默认的
@@ -189,10 +191,12 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public long getCount(String param) throws IOException, ParseException {
         Map map = objectMapper.readValue(param, Map.class);
-        SearchSourceBuilder searchSourceBuilder = SearchUtil.getSearchSourceBuilder(map);
+        /*SearchSourceBuilder searchSourceBuilder = SearchUtil.getSearchSourceBuilder(map);
         SearchRequest request = new SearchRequest(submitIndexName);
         request.source(searchSourceBuilder);
-        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-        return response.getHits().getTotalHits();
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);*/
+        SearchRequestBuilder requestBuilder = null;
+        /*return response.getHits().getTotalHits();*/
+        return 1;
     }
 }
