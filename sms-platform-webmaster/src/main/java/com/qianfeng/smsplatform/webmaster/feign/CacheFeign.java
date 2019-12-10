@@ -71,9 +71,8 @@ public interface CacheFeign {
      * @param map_json
      * @return
      */
-
-    @RequestMapping("/cache/hmset/{key}/{map}")
-    boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);
+    /*@RequestMapping("/cache/hmset/{key}/{map}")
+    boolean hMSet(@PathVariable("key") String key,@PathVariable("map") Map<String, Object> map);*/
 
     @RequestMapping("/cache/hmset/{key}/{map_json}")
     boolean hMSet(@PathVariable("key") String key,@PathVariable("key") String map_json);
