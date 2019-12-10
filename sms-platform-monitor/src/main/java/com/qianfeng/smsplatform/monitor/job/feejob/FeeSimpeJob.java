@@ -47,7 +47,7 @@ public class FeeSimpeJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
 
         Set<String> keys = cacheFeign.keys(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "*");
-        System.err.println(keys);
+        //System.err.println(keys);
         for (String key : keys) {
             long clientId = Long.valueOf(key.substring(key.indexOf(":")+1));
             //调用服务，查询对应客户信息
@@ -63,7 +63,7 @@ public class FeeSimpeJob implements SimpleJob {
                 submit.setDestMobile(client.getMobile());
                 submit.setSendTime(new Date());
                 submit.setSource(2);
-                String msg = "尊敬的用户"+clientId+"【账号余额"+exfee+"锂】===>温馨提示：您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)";
+                String msg = "尊敬的用户"+clientId+"【账号余额"+exfee+"厘】===>温馨提示：您的余额少于100元，请您及时充值,以免给您造成不便 ;) ;)";
                 submit.setMessageContent(msg);
 
                 amqpTemplate.convertAndSend(RabbitMqConsants.TOPIC_SMS_SEND_LOG,submit);
