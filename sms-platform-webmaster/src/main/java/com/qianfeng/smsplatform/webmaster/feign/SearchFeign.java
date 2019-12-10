@@ -3,6 +3,7 @@ package com.qianfeng.smsplatform.webmaster.feign;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,8 +25,8 @@ public interface SearchFeign {
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping("/search/list/{jsonParam}")
-    List<Map> search(@PathVariable String jsonParam) throws IOException, ParseException;
+    @RequestMapping(value = "/search/list/{jsonParam}",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    List<Map> search(@PathVariable("jsonParam") String jsonParam) throws IOException, ParseException;
 
 
     /**
@@ -35,6 +36,6 @@ public interface SearchFeign {
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping("/search/getCount/{jsonParam}")
-    long getCount(@PathVariable String jsonParam) throws IOException, ParseException;
+    @RequestMapping(value = "/search/getCount/{jsonParam}",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    long getCount(@PathVariable("jsonParam") String jsonParam) throws IOException, ParseException;
 }
