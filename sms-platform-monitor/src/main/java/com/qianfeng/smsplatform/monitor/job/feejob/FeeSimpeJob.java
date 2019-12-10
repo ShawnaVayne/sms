@@ -47,7 +47,7 @@ public class FeeSimpeJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
 
         Set<String> keys = cacheFeign.keys(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "*");
-        System.err.println(keys);
+        //System.err.println(keys);
         for (String key : keys) {
             long clientId = Long.valueOf(key.substring(key.indexOf(":")+1));
             //调用服务，查询对应客户信息

@@ -1,6 +1,6 @@
 package com.qianfeng.smsplatform.search.service;
 
-import org.springframework.messaging.support.GenericMessage;
+import com.qianfeng.smsplatform.common.model.Standard_Report;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -36,12 +36,13 @@ public interface SearchService {
 
     /**
      * todo:插入数据
-     * @param indexName index名字
      * @param TypeName type名字
+     * @param indexName index名字
+     * @param idName
      * @param json 插入内容
      * @return 是否插入成功
      */
-    boolean addToLog(String indexName,String typeName,String json) throws IOException;
+    boolean addToLog(String typeName, String indexName, String idName, String json) throws IOException;
 
     /**
      * todo:根据状态报告修改下行日志
@@ -51,7 +52,7 @@ public interface SearchService {
      * @param json
      * @return
      */
-    boolean updateLog(String indexName, String TypeName, String table, GenericMessage json) throws IOException;
+    boolean updateLog(String indexName, String TypeName, String table, String report) throws IOException;
 
     /**
      * todo:根据传递过来的json类型的字符串
