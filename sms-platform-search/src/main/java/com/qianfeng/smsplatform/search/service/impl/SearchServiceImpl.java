@@ -20,8 +20,14 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -32,6 +38,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +141,7 @@ public class SearchServiceImpl implements SearchService {
         if(pageNum==null){
             start = 1;
         }else{
-            start = Integer.parseInt((String) pageNum);
+            start = Integer.parseInt(String.valueOf(pageNum));
             if (start<=0){
                 start = 1;
             }
@@ -142,12 +149,13 @@ public class SearchServiceImpl implements SearchService {
         if(pageSize == null){
             rows = 10;
         }else{
-            rows = Integer.parseInt(pageSize.toString());
+            rows = Integer.parseInt(String.valueOf(pageSize));
             if(rows<=0){
                 rows = 10;
             }
         }
         searchSourceBuilder.from((start-1)*rows);
+        searchSourceBuilder.size(rows);
         //判断是否有关键字
         if(map.get("keyword")!=null){
             //判断用户是否传递了高亮前缀和高亮后缀，如果没有则用默认的
@@ -157,7 +165,7 @@ public class SearchServiceImpl implements SearchService {
                 highLightPostTag = "</span>";
             }
             if(highLightPreTag==null || "".equalsIgnoreCase(highLightPreTag.toString())){
-                highLightPreTag = "<span color='green'>";
+                highLightPreTag = "<span style='color:red;font-weight:bold;'>";
             }
             HighlightBuilder highlightBuilder = new HighlightBuilder();
             highlightBuilder.field("messageContent");
@@ -178,6 +186,9 @@ public class SearchServiceImpl implements SearchService {
             if(highlightField!=null){
                 Text[] fragments = highlightField.getFragments();
                 if(fragments!=null){
+                    for (Text fragment : fragments) {
+                        sourceMap.put("messageContent",fragment);
+                    }
                     String fragment = fragments[0].string();
                     sourceMap.put("messageContent",fragment);
                 }
@@ -188,12 +199,57 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
+    public Map<String,Long> getState(String param) throws IOException, ParseException {
+        Map map = objectMapper.readValue(param, Map.class);
+        SearchRequest searchRequest = new SearchRequest(submitIndexName);
+        searchRequest.types(submitTypeName);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        Object startTime = map.get("startTime");
+        Object endTime = map.get("endTime");
+        Object clientID = map.get("clientID");
+
+        if(startTime!=null & endTime!=null){
+            sourceBuilder.query(QueryBuilders.rangeQuery("sendTime").from((long)startTime).to((long)endTime));
+        }else if(startTime != null & endTime == null){
+            sourceBuilder.query(QueryBuilders.rangeQuery("sendTime").from((long)startTime));
+        }else if(startTime == null & endTime != null){
+            sourceBuilder.query(QueryBuilders.rangeQuery("sendTime").to((long)endTime));
+        }
+        if(clientID!=null){
+            TermQueryBuilder termQuery = QueryBuilders.termQuery("clientID", clientID.toString());
+            sourceBuilder.query(termQuery);
+        }
+        TermsAggregationBuilder aggregation = AggregationBuilders.terms("reportState")
+                    .field("reportState");
+        sourceBuilder.aggregation(aggregation);
+        searchRequest.source(sourceBuilder);
+
+        System.err.println("source:"+searchRequest.source());
+
+        SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
+        /*SearchHits hits = response.getHits();*/
+        Aggregations aggregations = response.getAggregations();
+        Terms client = aggregations.get("reportState");
+        List<? extends Terms.Bucket> buckets = client.getBuckets();
+        Map<String,Long> countMap = new HashMap<>(16);
+        for (int i = 0; i < buckets.size(); i++) {
+            Terms.Bucket bucket = buckets.get(i);
+            Object key = bucket.getKey();
+            long docCount = bucket.getDocCount();
+            countMap.put(key.toString(),docCount);
+        }
+        System.err.println(countMap);
+        return countMap;
+    }
+
+    @Override
     public long getCount(String param) throws IOException, ParseException {
         Map map = objectMapper.readValue(param, Map.class);
-        SearchSourceBuilder searchSourceBuilder = SearchUtil.getSearchSourceBuilder(map);
+        SearchSourceBuilder sourceBuilder = SearchUtil.getSearchSourceBuilder(map);
         SearchRequest request = new SearchRequest(submitIndexName);
-        request.source(searchSourceBuilder);
+        request.source(sourceBuilder);
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-        return response.getHits().getTotalHits();
+        long totalHits = response.getHits().getTotalHits();
+        return totalHits;
     }
 }

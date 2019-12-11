@@ -9,7 +9,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -31,13 +30,7 @@ public class SearchUtil {
                 .field("type","keyword")
                 .endObject()
                 .startObject("errorCode")
-                .field("type","text")
-                .startObject("fields")
-                    .startObject("keyword")
-                    .field("type","keyword")
-                    .field("ignore_above",256)
-                    .endObject()
-                .endObject()
+                .field("type","keyword")
                 .endObject()
                 .startObject("gatewayID")
                 .field("type","long")
@@ -62,10 +55,10 @@ public class SearchUtil {
                 .field("type","keyword")
                 .endObject()
                 .startObject("reportState")
-                .field("type","long")
+                .field("type","keyword")
                 .endObject()
                 .startObject("sendTime")
-                .field("type","date")
+                .field("type","long")
                 .endObject()
                 .startObject("source")
                 .field("type","long")
@@ -97,14 +90,19 @@ public class SearchUtil {
        RangeQueryBuilder receiveTerm = null;
        MatchQueryBuilder keywordMatch = null;
        if(clientID!=null){
-           clientTerm = new TermQueryBuilder("clientID",clientID.toString());
+           clientTerm = new TermQueryBuilder("clientID",String.valueOf(clientID));
            boolQueryBuilder.must(clientTerm);
        }
+<<<<<<< HEAD
        if(mobile!=null){
+=======
+       if(mobile!=null && !"".equalsIgnoreCase(mobile.toString().trim())){
+>>>>>>> 0048517cbb875fc10bc0075bb358bb88aa9d2849
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
        }
        if(startTime!=null & endTime!=null){
+<<<<<<< HEAD
            Date start = sdf.parse(startTime.toString());
            Date end = sdf.parse(endTime.toString());
            receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
@@ -121,6 +119,18 @@ public class SearchUtil {
            boolQueryBuilder.must(receiveTerm);
        }
        if(keywords != null){
+=======
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte((long)startTime).lte((long)endTime);
+           boolQueryBuilder.must(receiveTerm);
+       }else if(startTime != null & endTime == null){
+           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte((long)startTime);
+           boolQueryBuilder.must(receiveTerm);
+       }else if(startTime == null & endTime != null){
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte((long)endTime);
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(keywords != null && !"".equalsIgnoreCase(keywords.toString().trim())){
+>>>>>>> 0048517cbb875fc10bc0075bb358bb88aa9d2849
            keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
            boolQueryBuilder.must(keywordMatch);
        }

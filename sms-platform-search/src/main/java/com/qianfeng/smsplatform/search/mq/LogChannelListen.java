@@ -16,6 +16,7 @@ import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author simon
@@ -36,7 +37,10 @@ public class LogChannelListen {
     public void handleMsgFormSendSmsTopic(GenericMessage message) throws IOException {
         log.error("收到来自{}的信息是{}",RabbitMqConsants.TOPIC_SMS_SEND_LOG,message);
         Standard_Submit submitLog = (Standard_Submit) message.getPayload();
-        boolean result = searchService.addToLog(submitIndexName,submitTypeName,submitLog.getMsgid(),objectMapper.writeValueAsString(message.getPayload()));
+        String sub_str = objectMapper.writeValueAsString(submitLog);
+        Map map = objectMapper.readValue(sub_str, Map.class);
+        map.put("sendTime",submitLog.getSendTime().getTime());
+        boolean result = searchService.addToLog(submitIndexName,submitTypeName,submitLog.getMsgid(),objectMapper.writeValueAsString(map));
         if(result){
             log.error("插入成功！");
         }else {
