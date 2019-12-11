@@ -51,10 +51,14 @@ public class LogChannelListen {
     public void handleUpdateSmsReport(GenericMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag,Channel channel) throws IOException {
         log.error("收到来自{}的信息是{}",RabbitMqConsants.TOPIC_UPDATE_SMS_REPORT,message);
         Standard_Report report = (Standard_Report) message.getPayload();
-        System.err.println(report);
+        String report_sms = objectMapper.writeValueAsString(report);
+        Map map = objectMapper.readValue(report_sms, Map.class);
+        map.put("sendTime",report.getSendTime().getTime());
+        map.put("reportState",report.getState());
+        map.put("srcSequenceId",report.getSrcID());
         String msgId = report.getMsgId();
         try {
-            boolean result = searchService.updateLog(submitIndexName, submitTypeName, msgId, objectMapper.writeValueAsString(report));
+            boolean result = searchService.updateLog(submitIndexName, submitTypeName, msgId, objectMapper.writeValueAsString(map));
             if(result){
                 log.error("插入成功！");
             }else {

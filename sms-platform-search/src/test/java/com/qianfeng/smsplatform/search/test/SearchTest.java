@@ -42,7 +42,8 @@ public class SearchTest {
     @Test
     public void testSearch() throws IOException, ParseException {
         Map<String,String> map = new HashMap<>(16);
-        map.put("keyword","德");
+        map.put("keyword","4");
+        /*map.put("clientID","2");*/
         /*map.put("start","2");
         map.put("rows","5");*/
         /*map.put("startTime","2019-12-05 08:00:00");
@@ -54,11 +55,19 @@ public class SearchTest {
         }
     }
     @Test
+    public void testState() throws IOException, ParseException {
+        Map<String,String> map = new HashMap<>(16);
+        map.put("clientID","2");
+        String s = objectMapper.writeValueAsString(map);
+        Map<String, Long> count = searchService.getState(s);
+        System.err.println(count);
+    }
+    @Test
     public void testCount() throws IOException, ParseException {
         Map<String,String> map = new HashMap<>(16);
         map.put("clientID","2");
         String s = objectMapper.writeValueAsString(map);
-        Map<String, Long> count = searchService.getCount(s);
+        long count = searchService.getCount(s);
         System.err.println(count);
     }
     @Test

@@ -116,6 +116,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public boolean updateLog(String indexName, String typeName, String table, String json) throws IOException {
         UpdateRequest updateRequest = new UpdateRequest(indexName,typeName,table);
+        System.out.println(json);
         Map map = objectMapper.readValue(json, Map.class);
         UpdateRequest request = updateRequest.doc(map);
         UpdateResponse response = client.update(request, RequestOptions.DEFAULT);
@@ -153,7 +154,7 @@ public class SearchServiceImpl implements SearchService {
                 rows = 10;
             }
         }
-        searchSourceBuilder.from((start-1)*rows);
+        searchSourceBuilder.from(start);
         searchSourceBuilder.size(rows);
         //判断是否有关键字
         if(map.get("keyword")!=null){
