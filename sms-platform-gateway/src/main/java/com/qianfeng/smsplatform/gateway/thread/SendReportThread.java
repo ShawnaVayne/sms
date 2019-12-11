@@ -44,18 +44,25 @@ public class SendReportThread implements Runnable{
                     if (deliver.getStat().equals("DELIVER")){
                         report.setState(1);
                     }
+                    report.setSendTime(submit.getSendTime());
                     report.setSrcID(submit.getSrcSequenceId());
                     report.setMobile(submit.getDestMobile());
                     report.setErrorCode(deliver.getStat());
                     report.setMsgId(String.valueOf(msgid));
                     report.setClientID(submit.getClientID());
                     log.info("send report:{}",report);
+                    //发送推送报告
+                    System.err.println(pushTopic);
+                    System.err.println(report);
+                    System.err.println(rabbitTemplate);
                     rabbitTemplate.convertAndSend(pushTopic, report);
-//                    rabbitTemplate.convertAndSend(updateTopic, report);
+                    //发送更新推送报告
+                    rabbitTemplate.convertAndSend(updateTopic, report);
                     rabbitTemplate.convertAndSend(QUEUE_DELAY_PER_MESSAGE_TTL_MSG_SMS_SEND, report, new DelayMessagePostProcessor(10 * 1000));
                 } else {
                     sleep(2000);
                 }
+
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
                 sleep(2000);

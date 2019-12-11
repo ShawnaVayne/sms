@@ -122,6 +122,11 @@ public class ReciveMessage {
         }
         log.info("发送人手机号：{}", submit.getSrcNumber());
 
+        //如果过滤成功
+        if (report.getErrorCode() == null) {
+            report.setErrorCode("DELIVER");
+            submit.setErrorCode(report.getErrorCode());
+        }
         //int类型成员变量默认值为0，如果网关id为0，说明没有查到或者没有执行到这一步就被拦截，此时不需要创建网关队列
         if (submit.getGatewayID() != 0) {
             log.info("创建队列：{}", RabbitMqConsants.TOPIC_SMS_GATEWAY + submit.getGatewayID());
@@ -144,6 +149,7 @@ public class ReciveMessage {
             log.info("发送下发日志");
             //发送下发日志
             log.error("submit:{}", submit);
+            submit.setErrorCode(report.getErrorCode());
             sendMessage.sendMessage(RabbitMqConsants.TOPIC_SMS_SEND_LOG, submit);
         }
         //http方式推送，web方式不推送
@@ -151,6 +157,7 @@ public class ReciveMessage {
             //发送状态报告
             log.info("发送状态报告");
             log.error("report:{}", report);
+
             sendMessage.sendMessage(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, report);
         }
     }

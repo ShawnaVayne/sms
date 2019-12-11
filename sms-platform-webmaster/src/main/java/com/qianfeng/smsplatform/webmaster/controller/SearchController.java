@@ -55,6 +55,7 @@ public class SearchController {
         /////////////////////////////////////////////
         Long count = null;
         try {
+            System.err.println(str);
             count = searchFeign.getCount(str);
         } catch (Exception e) {
             e.printStackTrace();

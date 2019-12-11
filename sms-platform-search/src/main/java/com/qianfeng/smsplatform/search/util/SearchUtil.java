@@ -89,16 +89,37 @@ public class SearchUtil {
        TermQueryBuilder mobileTerm = null;
        RangeQueryBuilder receiveTerm = null;
        MatchQueryBuilder keywordMatch = null;
-
        if(clientID!=null){
            clientTerm = new TermQueryBuilder("clientID",String.valueOf(clientID));
            boolQueryBuilder.must(clientTerm);
        }
+<<<<<<< HEAD
+       if(mobile!=null){
+=======
        if(mobile!=null && !"".equalsIgnoreCase(mobile.toString().trim())){
+>>>>>>> 0048517cbb875fc10bc0075bb358bb88aa9d2849
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
        }
        if(startTime!=null & endTime!=null){
+<<<<<<< HEAD
+           Date start = sdf.parse(startTime.toString());
+           Date end = sdf.parse(endTime.toString());
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(startTime != null & endTime == null){
+           Date start = sdf.parse(startTime.toString());
+           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(startTime == null & endTime != null){
+           Date end = sdf.parse(endTime.toString());
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
+           boolQueryBuilder.must(receiveTerm);
+       }
+       if(keywords != null){
+=======
            receiveTerm = QueryBuilders.rangeQuery("sendTime").gte((long)startTime).lte((long)endTime);
            boolQueryBuilder.must(receiveTerm);
        }else if(startTime != null & endTime == null){
@@ -109,6 +130,7 @@ public class SearchUtil {
            boolQueryBuilder.must(receiveTerm);
        }
        if(keywords != null && !"".equalsIgnoreCase(keywords.toString().trim())){
+>>>>>>> 0048517cbb875fc10bc0075bb358bb88aa9d2849
            keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
            boolQueryBuilder.must(keywordMatch);
        }
