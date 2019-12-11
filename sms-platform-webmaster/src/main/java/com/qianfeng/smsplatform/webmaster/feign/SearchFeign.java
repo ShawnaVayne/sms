@@ -36,6 +36,6 @@ public interface SearchFeign {
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping(value = "/search/getCount/{jsonParam}",method = RequestMethod.GET,produces = "application/json;charset=UTF-8")
+    @RequestMapping("/search/getCount/{jsonParam}")
     long getCount(@PathVariable("jsonParam") String jsonParam) throws IOException, ParseException;
 }

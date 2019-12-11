@@ -68,7 +68,7 @@ public interface CacheFeign {
     /**
      * 向redis中插入hash类型的数据
      * @param key
-     * @param map
+     * @param map_json
      * @return
      */
 

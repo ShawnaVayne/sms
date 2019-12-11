@@ -96,27 +96,31 @@ public class SearchUtil {
        TermQueryBuilder mobileTerm = null;
        RangeQueryBuilder receiveTerm = null;
        MatchQueryBuilder keywordMatch = null;
-
        if(clientID!=null){
            clientTerm = new TermQueryBuilder("clientID",clientID.toString());
            boolQueryBuilder.must(clientTerm);
-       }else if(mobile!=null){
+       }
+       if(mobile!=null){
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
-       } else if(startTime!=null & endTime!=null){
+       }
+       if(startTime!=null & endTime!=null){
            Date start = sdf.parse(startTime.toString());
            Date end = sdf.parse(endTime.toString());
            receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
            boolQueryBuilder.must(receiveTerm);
-       }else if(startTime != null & endTime == null){
+       }
+       if(startTime != null & endTime == null){
            Date start = sdf.parse(startTime.toString());
            receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
            boolQueryBuilder.must(receiveTerm);
-       }else if(startTime == null & endTime != null){
+       }
+       if(startTime == null & endTime != null){
            Date end = sdf.parse(endTime.toString());
            receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
            boolQueryBuilder.must(receiveTerm);
-       }else if(keywords != null){
+       }
+       if(keywords != null){
            keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
            boolQueryBuilder.must(keywordMatch);
        }

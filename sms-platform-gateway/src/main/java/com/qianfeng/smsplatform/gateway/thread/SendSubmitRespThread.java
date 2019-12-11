@@ -30,6 +30,8 @@ public class SendSubmitRespThread implements Runnable{
             try {
                 if (mtqueue.size() > 0) {
                     Standard_Submit resp = (Standard_Submit) mtqueue.remove();
+                    System.err.println(resp);
+                    System.err.println(topic);
                     rabbitTemplate.convertAndSend(topic, resp);
                 } else {
                     sleep(2000);
