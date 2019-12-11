@@ -42,7 +42,7 @@ public class SearchTest {
     @Test
     public void testSearch() throws IOException, ParseException {
         Map<String,String> map = new HashMap<>(16);
-        map.put("keyword","余额");
+        map.put("keyword","德");
         /*map.put("start","2");
         map.put("rows","5");*/
         /*map.put("startTime","2019-12-05 08:00:00");
@@ -52,18 +52,21 @@ public class SearchTest {
         for (Map search1 : search) {
             System.err.println(search1);
         }
-        long count = searchService.getCount(s);
+    }
+    @Test
+    public void testCount() throws IOException, ParseException {
+        Map<String,String> map = new HashMap<>(16);
+        map.put("clientID","2");
+        String s = objectMapper.writeValueAsString(map);
+        Map<String, Long> count = searchService.getCount(s);
         System.err.println(count);
     }
     @Test
     public void testUpdate() throws IOException {
         Map<String,String> map = new HashMap<>(16);
-        map.put("keyword","不足");
-        map.put("start","2");
-        map.put("rows","5");
-       map.put("msgid","3901540872014594049");
-       map.put("keyword","德玛西亚之力");
-        /*boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "3901540872014594049", objectMapper.writeValueAsString(map));*/
+        map.put("msgid","69654153-a1f2-467f-88aa-b3fb8870816c");
+        map.put("messageContent","德玛西亚之力");
+        boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "69654153-a1f2-467f-88aa-b3fb8870816c", objectMapper.writeValueAsString(map));
         String s = objectMapper.writeValueAsString(map);
         System.err.println(s);
 

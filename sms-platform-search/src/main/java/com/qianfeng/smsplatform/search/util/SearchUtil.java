@@ -31,13 +31,7 @@ public class SearchUtil {
                 .field("type","keyword")
                 .endObject()
                 .startObject("errorCode")
-                .field("type","text")
-                .startObject("fields")
-                    .startObject("keyword")
-                    .field("type","keyword")
-                    .field("ignore_above",256)
-                    .endObject()
-                .endObject()
+                .field("type","keyword")
                 .endObject()
                 .startObject("gatewayID")
                 .field("type","long")
@@ -97,68 +91,33 @@ public class SearchUtil {
        RangeQueryBuilder receiveTerm = null;
        MatchQueryBuilder keywordMatch = null;
 
-       /*if(clientID!=null){
-           clientTerm = new TermQueryBuilder("clientID",clientID.toString());
-           boolQueryBuilder.must(clientTerm);
-       }else if(mobile!=null){
-           mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
-           boolQueryBuilder.must(mobileTerm);
-       }else if(startTime!=null & endTime!=null){
-           *//*Date start = sdf.parse(startTime.toString());
-           Date end = sdf.parse(endTime.toString());*//*
-           Date start = new Date((long) startTime);
-           Date end = new Date((long) endTime);
-           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
-           boolQueryBuilder.must(receiveTerm);
-       }else if(startTime != null & endTime == null){
-           *//*Date start = sdf.parse(startTime.toString());*//*
-           Date start = new Date((long) startTime);
-           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
-           boolQueryBuilder.must(receiveTerm);
-       }else if(startTime == null & endTime != null){
-           *//*Date end = sdf.parse(endTime.toString());*//*
-           Date end = new Date((long) endTime);
-           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
-           boolQueryBuilder.must(receiveTerm);
-       }else if(keywords != null){
-           keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
-           boolQueryBuilder.must(keywordMatch);
-       }*/
        if(clientID!=null){
            clientTerm = new TermQueryBuilder("clientID",String.valueOf(clientID));
            boolQueryBuilder.must(clientTerm);
        }
-       if(mobile!=null){
+       if(mobile!=null && !"".equalsIgnoreCase(mobile.toString().trim())){
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
        }
        if(startTime!=null & endTime!=null){
-           /*Date start = sdf.parse(startTime.toString());
-           Date end = sdf.parse(endTime.toString());*/
-           Date start = new Date((long) startTime);
-           Date end = new Date((long) endTime);
-           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte(start.getTime()).lte(end.getTime());
+           /*Date start = new Date((Long) startTime);
+           Date end = new Date((Long) endTime);*/
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").gte((long)startTime).lte((long)endTime);
+           boolQueryBuilder.must(receiveTerm);
+       }else if(startTime != null & endTime == null){
+           Date start = new Date((Long) startTime);
+           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte((long)startTime);
+           boolQueryBuilder.must(receiveTerm);
+       }else if(startTime == null & endTime != null){
+           Date end = new Date((Long) endTime);
+           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte((long)endTime);
            boolQueryBuilder.must(receiveTerm);
        }
-       if(startTime != null & endTime == null){
-           /*Date start = sdf.parse(startTime.toString());*/
-           Date start = new Date((long) startTime);
-           receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte(start.getTime());
-           boolQueryBuilder.must(receiveTerm);
-       }
-       if(startTime == null & endTime != null){
-           /*Date end = sdf.parse(endTime.toString());*/
-           Date end = new Date((long) endTime);
-           receiveTerm = QueryBuilders.rangeQuery("sendTime").lte(end.getTime());
-           boolQueryBuilder.must(receiveTerm);
-       }
-       if(keywords != null){
+       if(keywords != null && !"".equalsIgnoreCase(keywords.toString().trim())){
            keywordMatch = QueryBuilders.matchQuery("messageContent", keywords.toString());
            boolQueryBuilder.must(keywordMatch);
        }
        sourceBuilder.query(boolQueryBuilder);
        return sourceBuilder;
    }
-
-
 }

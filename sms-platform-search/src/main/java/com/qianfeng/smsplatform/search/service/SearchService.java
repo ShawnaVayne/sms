@@ -66,5 +66,5 @@ public interface SearchService {
      * @param param
      * @return
      */
-    long getCount(String param) throws IOException, ParseException;
+    Map<String,Long> getCount(String param) throws IOException, ParseException;
 }
