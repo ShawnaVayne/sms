@@ -9,7 +9,6 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -56,7 +55,7 @@ public class SearchUtil {
                 .field("type","keyword")
                 .endObject()
                 .startObject("reportState")
-                .field("type","long")
+                .field("type","keyword")
                 .endObject()
                 .startObject("sendTime")
                 .field("type","long")
@@ -100,16 +99,12 @@ public class SearchUtil {
            boolQueryBuilder.must(mobileTerm);
        }
        if(startTime!=null & endTime!=null){
-           /*Date start = new Date((Long) startTime);
-           Date end = new Date((Long) endTime);*/
            receiveTerm = QueryBuilders.rangeQuery("sendTime").gte((long)startTime).lte((long)endTime);
            boolQueryBuilder.must(receiveTerm);
        }else if(startTime != null & endTime == null){
-           Date start = new Date((Long) startTime);
            receiveTerm =  QueryBuilders.rangeQuery("sendTime").gte((long)startTime);
            boolQueryBuilder.must(receiveTerm);
        }else if(startTime == null & endTime != null){
-           Date end = new Date((Long) endTime);
            receiveTerm = QueryBuilders.rangeQuery("sendTime").lte((long)endTime);
            boolQueryBuilder.must(receiveTerm);
        }

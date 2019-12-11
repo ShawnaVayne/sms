@@ -64,9 +64,9 @@ public class SearchTest {
     @Test
     public void testUpdate() throws IOException {
         Map<String,String> map = new HashMap<>(16);
-        map.put("msgid","69654153-a1f2-467f-88aa-b3fb8870816c");
-        map.put("messageContent","德玛西亚之力");
-        boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "69654153-a1f2-467f-88aa-b3fb8870816c", objectMapper.writeValueAsString(map));
+        /*map.put("msgid","73740a57-128b-41d6-aa2f-ff4a9f70b195");*/
+        map.put("reportState","0");
+        boolean b = searchService.updateLog("eleven_sms_submit_log", "eleven_sms_submit_log_type", "73740a57-128b-41d6-aa2f-ff4a9f70b195", objectMapper.writeValueAsString(map));
         String s = objectMapper.writeValueAsString(map);
         System.err.println(s);
 

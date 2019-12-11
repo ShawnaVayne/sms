@@ -28,10 +28,19 @@ public class SearchController {
         return search;
     }
 
-    @RequestMapping("/getCount/{jsonParam}")
-    public Map<String,Long> getCount(@PathVariable String jsonParam) throws IOException, ParseException {
+    @RequestMapping("/getState/{jsonParam}")
+    public Map<String,Long> getState(@PathVariable String jsonParam) throws IOException, ParseException {
         System.err.println("接收到的接送字符串："+jsonParam);
-        Map<String, Long> count = searchService.getCount(jsonParam);
+        Map<String, Long> map = searchService.getState(jsonParam);
+        return map;
+    }
+
+    @RequestMapping("/getCount/{jsonParam}")
+    public long getCount(@PathVariable String jsonParam) throws IOException, ParseException {
+        System.err.println("接收到的字符串:"+jsonParam);
+        long count = searchService.getCount(jsonParam);
+        System.err.println("匹配到的总条数："+count);
         return count;
     }
+
 }

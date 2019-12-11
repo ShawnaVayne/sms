@@ -62,9 +62,16 @@ public interface SearchService {
     List<Map> search(String param) throws IOException, ParseException;
 
     /**
-     * todo:根据条件查找统计数据
+     * todo:根据条件查找状态的统计数据
      * @param param
      * @return
      */
-    Map<String,Long> getCount(String param) throws IOException, ParseException;
+    Map<String,Long> getState(String param) throws IOException, ParseException;
+
+    /**
+     * todo: 根据条件查找符合条件的总数
+     * @param param
+     * @return
+     */
+    long getCount(String param) throws IOException, ParseException;
 }

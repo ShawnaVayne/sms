@@ -20,15 +20,14 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCount;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -199,12 +198,11 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Map<String,Long> getCount(String param) throws IOException, ParseException {
+    public Map<String,Long> getState(String param) throws IOException, ParseException {
         Map map = objectMapper.readValue(param, Map.class);
         SearchRequest searchRequest = new SearchRequest(submitIndexName);
         searchRequest.types(submitTypeName);
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
         Object startTime = map.get("startTime");
         Object endTime = map.get("endTime");
         Object clientID = map.get("clientID");
@@ -216,29 +214,41 @@ public class SearchServiceImpl implements SearchService {
         }else if(startTime == null & endTime != null){
             sourceBuilder.query(QueryBuilders.rangeQuery("sendTime").to((long)endTime));
         }
-        TermsAggregationBuilder aggregation = AggregationBuilders.terms("clientID")
-                    .field("clientID");
-        aggregation.subAggregation(AggregationBuilders.count("stateCount")
-                    .field("reportState"));
+        if(clientID!=null){
+            TermQueryBuilder termQuery = QueryBuilders.termQuery("clientID", clientID.toString());
+            sourceBuilder.query(termQuery);
+        }
+        TermsAggregationBuilder aggregation = AggregationBuilders.terms("reportState")
+                    .field("reportState");
         sourceBuilder.aggregation(aggregation);
         searchRequest.source(sourceBuilder);
 
         System.err.println("source:"+searchRequest.source());
 
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
-        SearchHits hits = response.getHits();
+        /*SearchHits hits = response.getHits();*/
         Aggregations aggregations = response.getAggregations();
-        Terms client = aggregations.get("clientID");
+        Terms client = aggregations.get("reportState");
         List<? extends Terms.Bucket> buckets = client.getBuckets();
         Map<String,Long> countMap = new HashMap<>(16);
         for (int i = 0; i < buckets.size(); i++) {
             Terms.Bucket bucket = buckets.get(i);
             Object key = bucket.getKey();
-            ValueCount stateCount = bucket.getAggregations().get("stateCount");
-            long value = stateCount.getValue();
-            countMap.put(key.toString(),value);
+            long docCount = bucket.getDocCount();
+            countMap.put(key.toString(),docCount);
         }
         System.err.println(countMap);
         return countMap;
+    }
+
+    @Override
+    public long getCount(String param) throws IOException, ParseException {
+        Map map = objectMapper.readValue(param, Map.class);
+        SearchSourceBuilder sourceBuilder = SearchUtil.getSearchSourceBuilder(map);
+        SearchRequest request = new SearchRequest(submitIndexName);
+        request.source(sourceBuilder);
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        long totalHits = response.getHits().getTotalHits();
+        return totalHits;
     }
 }
