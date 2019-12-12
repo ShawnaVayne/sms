@@ -55,7 +55,7 @@ public class LogChannelListen {
         Map map = objectMapper.readValue(report_sms, Map.class);
         map.put("sendTime",report.getSendTime().getTime());
         map.put("reportState",report.getState());
-        map.put("srcSequenceId",report.getSrcID());
+        //map.put("srcSequenceId",report.getSrcID());
         String msgId = report.getMsgId();
         try {
             boolean result = searchService.updateLog(submitIndexName, submitTypeName, msgId, objectMapper.writeValueAsString(map));

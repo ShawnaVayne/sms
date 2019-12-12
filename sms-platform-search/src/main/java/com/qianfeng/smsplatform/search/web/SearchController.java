@@ -23,11 +23,7 @@ public class SearchController {
 
     @RequestMapping("/list/{jsonParam}")
     public List<Map> search(@PathVariable String jsonParam) throws IOException, ParseException {
-<<<<<<< HEAD
-        System.err.println(jsonParam);
-=======
         System.err.println("接收到的接送字符串："+jsonParam);
->>>>>>> 0048517cbb875fc10bc0075bb358bb88aa9d2849
         List<Map> search = searchService.search(jsonParam);
         return search;
     }

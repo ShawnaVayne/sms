@@ -15,7 +15,7 @@ public class NettyConfig {
     @Autowired
     private AmqpTemplate rabbitTemplate;
     //ip
-    public static String host = "10.9.21.228";
+    public static String host = "127.0.0.1";
     //端口
     public static int port = 7890;
     //账号

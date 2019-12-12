@@ -42,7 +42,7 @@ public class SearchTest {
     @Test
     public void testSearch() throws IOException, ParseException {
         Map<String,String> map = new HashMap<>(16);
-        map.put("keyword","4");
+        map.put("keyword","你好");
         /*map.put("clientID","2");*/
         /*map.put("start","2");
         map.put("rows","5");*/

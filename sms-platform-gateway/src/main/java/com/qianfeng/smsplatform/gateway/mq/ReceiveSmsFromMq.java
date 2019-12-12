@@ -1,7 +1,6 @@
 package com.qianfeng.smsplatform.gateway.mq;
 
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
-import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.gateway.netty4.NettyClient;
 import com.qianfeng.smsplatform.gateway.netty4.Utils.Command;
@@ -20,11 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
-
-import static com.qianfeng.smsplatform.common.constants.RabbitMqConsants.TOPIC_PRE_SEND;
-import static com.qianfeng.smsplatform.common.constants.RabbitMqConsants.TOPIC_UPDATE_SMS_REPORT;
-import static com.qianfeng.smsplatform.gateway.config.RabbitConfig.QUEUE_DELAY_PER_MESSAGE_TTL_MSG_SMS_SEND;
 
 @Component
 public class ReceiveSmsFromMq {
@@ -38,9 +32,8 @@ public class ReceiveSmsFromMq {
 
 //    @Value("${gateway.sendtopic}")
 //    private String sendtopic;
-    /**
-     * 消息接受  并发消费
-     */
+
+
     @RabbitListener(queues = {"eleven_sms_send_gateway_1","eleven_sms_send_gateway_2","eleven_sms_send_gateway_3"}, containerFactory = "pointTaskContainerFactory")
     public void receive(Standard_Submit submit) throws IOException, InterruptedException {
         SendReportThread sendReportThread = new SendReportThread(RabbitMqConsants.TOPIC_PUSH_SMS_REPORT, RabbitMqConsants.TOPIC_UPDATE_SMS_REPORT, new RabbitTemplate());
