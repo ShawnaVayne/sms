@@ -9,3 +9,6 @@ eureka:
     # 设置与Eureka Server交互的地址，查询服务和注册服务都需要依赖这个地址。默认是http://localhost:8000/eureka ；多个地址可使用,分隔
     service-url:
       defaultZone: http://admin:123456@localhost:8000/eureka/
+  instance:
+    prefer-ip-address: true
+    ip-address: 10.9.21.228

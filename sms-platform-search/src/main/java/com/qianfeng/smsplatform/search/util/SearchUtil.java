@@ -94,7 +94,6 @@ public class SearchUtil {
            boolQueryBuilder.must(clientTerm);
        }
        if(mobile!=null && !"".equalsIgnoreCase(mobile.toString().trim())){
-
            mobileTerm = new TermQueryBuilder("destMobile",mobile.toString());
            boolQueryBuilder.must(mobileTerm);
        }
