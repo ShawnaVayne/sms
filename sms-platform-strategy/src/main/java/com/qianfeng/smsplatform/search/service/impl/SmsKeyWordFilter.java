@@ -11,16 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
-import org.wltea.analyzer.lucene.IKAnalyzer;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 import java.util.Set;
 
 /**
- * @Author 徐胜涵
+ * @Author simon
  */
 @Service
 @Slf4j

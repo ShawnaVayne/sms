@@ -6,14 +6,13 @@ import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.search.feign.CacheFeignClient;
 import com.qianfeng.smsplatform.search.service.MyFilter;
-import com.qianfeng.smsplatform.search.util.CheckPhone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 /**
- * @Author 徐胜涵
+ * @Author simon
  */
 @Service
 public class SmsRouterFilter implements MyFilter {

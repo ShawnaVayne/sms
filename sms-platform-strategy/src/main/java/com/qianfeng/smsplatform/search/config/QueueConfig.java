@@ -2,20 +2,12 @@ package com.qianfeng.smsplatform.search.config;
 
 
 import com.qianfeng.smsplatform.common.constants.RabbitMqConsants;
-import com.qianfeng.smsplatform.search.util.ConnectionUtils;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 
 /**
- * @Author 徐胜涵
+ * @Author simon
  */
 @Configuration
 public class QueueConfig {

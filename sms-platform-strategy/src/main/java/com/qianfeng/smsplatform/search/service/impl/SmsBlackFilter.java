@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * @Author 徐胜涵
+ * @Author simon
  */
 @Service
 public class SmsBlackFilter implements MyFilter {

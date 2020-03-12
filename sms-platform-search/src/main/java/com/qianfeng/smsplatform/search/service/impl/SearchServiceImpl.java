@@ -48,7 +48,7 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class SearchServiceImpl implements SearchService {
+public class  SearchServiceImpl implements SearchService {
     @Value("${elasticsearch.index.submit.name}")
     private String submitIndexName;
     @Value("${elasticsearch.index.submit.type}")

@@ -6,18 +6,14 @@ import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import com.qianfeng.smsplatform.search.feign.CacheFeignClient;
 import com.qianfeng.smsplatform.search.service.MyFilter;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
- * @Author 徐胜涵
+ * @Author simon
  */
 @Service
 @Slf4j

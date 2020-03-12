@@ -32,6 +32,8 @@ public class CacheServiceTest {
         /*cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "0", money1);
         cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "2", money2);*/
         cacheService.set(CacheConstants.CACHE_PREFIX_CUSTOMER_FEE + "0", money2);
+
+
     }
 
     @Test

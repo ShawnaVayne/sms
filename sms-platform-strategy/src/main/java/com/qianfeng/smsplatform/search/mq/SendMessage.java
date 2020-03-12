@@ -1,6 +1,5 @@
 package com.qianfeng.smsplatform.search.mq;
 
-import com.netflix.discovery.converters.Auto;
 import com.qianfeng.smsplatform.common.model.Standard_Report;
 import com.qianfeng.smsplatform.common.model.Standard_Submit;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * @Author 徐胜涵
+ * @Author simon
  */
 @Component
 public class SendMessage {
